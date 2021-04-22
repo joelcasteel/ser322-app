@@ -1,19 +1,29 @@
 package ui;
 
+import java.awt.BorderLayout;
+
 import javax.swing.*;
 
 public class MainPage {
     JFrame frame;
 
     public MainPage() {
-        frame = new JFrame();
+        frame = new JFrame("Encounter Builder");
 
+        JPanel mid = new JPanel();
+        mid.setLayout(new BoxLayout(mid, BoxLayout.Y_AXIS));
+        frame.add(mid, BorderLayout.CENTER);
 
-        JButton button = new JButton("Hello There");
-        frame.add(button);
+        mid.add(new EncounterMonsterList());
+        mid.add(new PlayerList());
+
+        EncounterInfo encounterInfo = new EncounterInfo();
+        frame.add(encounterInfo, BorderLayout.NORTH);
+
+        frame.add(new MonsterSearch(), BorderLayout.WEST);
+
 
         frame.setSize(900, 600);
-        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         frame.setVisible(true);
         
 
