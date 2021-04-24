@@ -41,6 +41,7 @@ public class MonsterFactory {
             monster.setHp(rs.getInt("HP"));
             monster.setAc(rs.getInt("ArmorClass"));
             monster.setCr(rs.getLong("ChallengeRating"));
+            monster.setLegendCount(rs.getInt("LegendCount"));
 
             monster.setType(rs.getString("Type"));
             monster.setSize(rs.getString("Size"));

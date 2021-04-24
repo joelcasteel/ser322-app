@@ -26,6 +26,8 @@ public class Monster {
     private int ac;
     private double cr;
 
+    private int legendCount;
+
     //Descriptors
     private String type;
     private String size;
@@ -151,6 +153,14 @@ public class Monster {
 
     public void setCr(double cr) {
         this.cr = cr;
+    }
+
+    public int getLegendCount() {
+        return this.legendCount;
+    }
+
+    public void setLegendCount(int leg) {
+        this.legendCount = leg;
     }
 
     public String getType() {
