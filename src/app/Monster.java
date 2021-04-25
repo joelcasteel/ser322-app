@@ -225,6 +225,20 @@ public class Monster {
         this.languages.add(lang);
     }
     
+    public void addAction(Action action) {
+        actions.add(action);
+    }
 
+    public Action getAction(int i) {
+        return actions.get(i);
+    }
+
+    public void addLegendaryAction(LegendaryAction legendaryAction) {
+        legendaryActions.add(legendaryAction);
+    }
+
+    public LegendaryAction gLegendaryAction(int i) {
+        return legendaryActions.get(i);
+    }
     
 }

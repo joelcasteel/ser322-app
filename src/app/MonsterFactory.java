@@ -15,6 +15,9 @@ public class MonsterFactory {
         addMonsterSenses(conn, monster, name, source);
         addMonsterCondImmunities(conn, monster, name, source);
         addMonsterLanguages(conn, monster, name, source);
+        addMonsterActions(conn, monster, name, source);
+        addMonsterLegendaruActions(conn, monster, name, source);
+
 
         return monster;
     }
@@ -135,6 +138,68 @@ public class MonsterFactory {
 
             while(rs.next()) {
                 monster.addLanguage(rs.getString("LanguageName"));
+        }
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+    }
+
+    private static void addMonsterActions(Connection conn, Monster monster, String name, String source) {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT ActionName, Description FROM ACTIONS WHERE MName = ? AND MSource = ?");
+            stmt.setString(1, name);
+            stmt.setString(2, source);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                monster.addAction(new Action(rs.getString("ActionName"), rs.getString("Description")));
+        }
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+    }
+
+    private static void addMonsterLegendaruActions(Connection conn, Monster monster, String name, String source) {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT ActionName, Description, Cost FROM LEGENDARY_ACTIONS WHERE MName = ? AND MSource = ?");
+            stmt.setString(1, name);
+            stmt.setString(2, source);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                monster.addLegendaryAction(
+                    new LegendaryAction(rs.getString("ActionName"),
+                    rs.getString("Description"),
+                    rs.getInt("Cost")
+                ));
         }
 
         } catch(Exception exception) {
