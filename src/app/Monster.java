@@ -39,12 +39,18 @@ public class Monster {
     private List<String> condImmunities;
     private List<String> languages;
 
+    private List<Action> actions;
+    private List<LegendaryAction> legendaryActions;
+
     public Monster() {
         stats = new HashMap<>();
         
         senses = new ArrayList<>();
         condImmunities = new ArrayList<>();
         languages = new ArrayList<>();
+
+        actions = new ArrayList<>();
+        legendaryActions = new ArrayList<>();
     }
 
     public void setTitle(String pName, String pSource) {
