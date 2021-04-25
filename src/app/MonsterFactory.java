@@ -35,12 +35,13 @@ public class MonsterFactory {
 
             monster.setTitle(rs.getString("Name"), rs.getString("Source"));
 
-            monster.setStat("str", rs.getInt("STR"));
-            monster.setStat("dex", rs.getInt("DEX"));
-            monster.setStat("con", rs.getInt("CON"));
-            monster.setStat("intel", rs.getInt("INTEL"));
-            monster.setStat("wis", rs.getInt("WIS"));
-            monster.setStat("cha", rs.getInt("CHA"));
+            monster.setStr(rs.getInt("STR"));
+            monster.setDex(rs.getInt("DEX"));
+            monster.setCon(rs.getInt("CON"));
+
+            monster.setIntl(rs.getInt("INTEL"));
+            monster.setWis(rs.getInt("WIS"));
+            monster.setCha(rs.getInt("CHA"));
 
             monster.setHp(rs.getInt("HP"));
             monster.setAc(rs.getInt("ArmorClass"));
