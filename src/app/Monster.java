@@ -42,6 +42,8 @@ public class Monster {
     private List<Action> actions;
     private List<LegendaryAction> legendaryActions;
 
+    private List<Passive> passives;
+
     public Monster() {
         stats = new HashMap<>();
         
@@ -51,6 +53,7 @@ public class Monster {
 
         actions = new ArrayList<>();
         legendaryActions = new ArrayList<>();
+        passives = new ArrayList<>();
     }
 
     public void setTitle(String pName, String pSource) {
@@ -240,5 +243,15 @@ public class Monster {
     public LegendaryAction gLegendaryAction(int i) {
         return legendaryActions.get(i);
     }
+
+    public void addPassive(Passive passive) {
+        passives.add(passive);
+    }
+
+    public Passive getPassive(int i) {
+        return passives.get(i);
+    }
+
+    
     
 }

@@ -16,7 +16,8 @@ public class MonsterFactory {
         addMonsterCondImmunities(conn, monster, name, source);
         addMonsterLanguages(conn, monster, name, source);
         addMonsterActions(conn, monster, name, source);
-        addMonsterLegendaruActions(conn, monster, name, source);
+        addMonsterLegendaryActions(conn, monster, name, source);
+        addMonsterPassives(conn, monster, name, source);
 
 
         return monster;
@@ -186,7 +187,7 @@ public class MonsterFactory {
         }
     }
 
-    private static void addMonsterLegendaruActions(Connection conn, Monster monster, String name, String source) {
+    private static void addMonsterLegendaryActions(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
         try {
@@ -200,6 +201,38 @@ public class MonsterFactory {
                     new LegendaryAction(rs.getString("ActionName"),
                     rs.getString("Description"),
                     rs.getInt("Cost")
+                ));
+        }
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+    }
+
+    private static void addMonsterPassives(Connection conn, Monster monster, String name, String source) {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT PassiveName, Description FROM PASSIVES WHERE MName = ? AND MSource = ?");
+            stmt.setString(1, name);
+            stmt.setString(2, source);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                monster.addPassive(
+                    new Passive(rs.getString("PassiveName"),
+                    rs.getString("Description")
                 ));
         }
 

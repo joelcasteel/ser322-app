@@ -1,10 +1,10 @@
 package app;
 
-public class Action {
+public class Passive {
     private String name;
     private String description;
 
-    public Action(String pName, String pDescription) {
+    public Passive(String pName, String pDescription) {
         name = pName;
         description = pDescription;
     }
