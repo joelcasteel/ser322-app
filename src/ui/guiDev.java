@@ -1,7 +1,12 @@
 package ui;
 
 import javax.swing.*;
+
+import app.Monster;
+import app.MonsterFactory;
+
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -53,7 +58,11 @@ public class guiDev extends JFrame {
 		JButton btnMonsterSearch = new JButton("Search Monster");
 		btnMonsterSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				String name = txtMonsterName.getText();
+				String source = txtMonsterSource.getText();
+
+				Monster monster = MonsterFactory.createMonster(name, source);
+				monster.getAc();
 			}
 		});
 		MonsterSearchBarPanel.add(btnMonsterSearch);

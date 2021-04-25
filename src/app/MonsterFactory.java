@@ -7,17 +7,32 @@ public class MonsterFactory {
     /**
      * This will give us a way to dump monsters into an object.
      */
-    public static Monster createMonster(Connection conn, String name, String source) throws Exception{
+    public static Monster createMonster(String name, String source) {
 
         Monster monster = new Monster();
+        Connection conn = null;
 
-        setMonsterBase(conn, monster, name, source);
-        addMonsterSenses(conn, monster, name, source);
-        addMonsterCondImmunities(conn, monster, name, source);
-        addMonsterLanguages(conn, monster, name, source);
-        addMonsterActions(conn, monster, name, source);
-        addMonsterLegendaryActions(conn, monster, name, source);
-        addMonsterPassives(conn, monster, name, source);
+        try {
+            conn = ConnectionFactory.getConnection();
+
+            setMonsterBase(conn, monster, name, source);
+            addMonsterSenses(conn, monster, name, source);
+            addMonsterCondImmunities(conn, monster, name, source);
+            addMonsterLanguages(conn, monster, name, source);
+            addMonsterActions(conn, monster, name, source);
+            addMonsterLegendaryActions(conn, monster, name, source);
+            addMonsterPassives(conn, monster, name, source);
+
+        } catch(Exception exception) {
+
+        } finally {
+            try {
+                conn.close();
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+            }
+        }
+        
 
 
         return monster;

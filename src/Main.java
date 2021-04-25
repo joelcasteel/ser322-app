@@ -13,30 +13,20 @@ public class Main {
         String _pwd = args[2];
         String _driver = args[3];
 
-        Connection conn = null;
         try {
-            Class.forName(_driver);
 
-            conn = DriverManager.getConnection(_url, _user, _pwd);
+            ConnectionFactory.setupInfo(_url, _user, _pwd, _driver);
 
-            Monster monster = MonsterFactory.createMonster(conn, "Goblin", "MM");
+        } catch(Exception exception) {
+            exception.printStackTrace();
+        }
+
+            Monster monster = MonsterFactory.createMonster("Goblin", "MM");
             monster.getCon();
 
-            Encounter encounter = EncounterFactory.createEncounter(conn, "Two Much Pudding", "emagoffi");
+            Encounter encounter = EncounterFactory.createEncounter("Two Much Pudding", "emagoffi");
             encounter.getDescription();
 
-        } catch (Exception exception) {
-            exception.printStackTrace();
-
-        } finally {
-            try {
-                conn.close();
-
-            } catch(SQLException sqlException) {
-                sqlException.printStackTrace();
-
-            }
-        }
         guiDev gui = new guiDev();
         
 

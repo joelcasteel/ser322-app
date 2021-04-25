@@ -3,11 +3,27 @@ package app;
 import java.sql.*;
 
 public class EncounterFactory {
-    public static Encounter createEncounter(Connection conn, String eName, String username) {
+    public static Encounter createEncounter(String eName, String username) {
         Encounter encounter = new Encounter();
+        Connection conn = null;
+
+        try {
+            conn = ConnectionFactory.getConnection();
 
         setEncounterBase(conn, encounter, eName, username);
         addMonsterEntries(conn, encounter, eName, username);
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                conn.close();
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+            }
+        }
 
         return encounter;
     }
@@ -60,7 +76,7 @@ public class EncounterFactory {
                 Monster monster = encounter.getMonster(mName, mSource);
 
                 if(monster== null) {
-                    monster = MonsterFactory.createMonster(conn, rs.getString("MName"), rs.getString("MSource"));
+                    monster = MonsterFactory.createMonster(rs.getString("MName"), rs.getString("MSource"));
                     encounter.addMonster(monster);
                 }
 
