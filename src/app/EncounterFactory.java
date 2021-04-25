@@ -55,10 +55,17 @@ public class EncounterFactory {
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                Monster monster = MonsterFactory.createMonster(conn, rs.getString("MName"), rs.getString("MSource"));
+                String mName = rs.getString("MName");
+                String mSource = rs.getString("MSource");
+                Monster monster = encounter.getMonster(mName, mSource);
+
+                if(monster== null) {
+                    monster = MonsterFactory.createMonster(conn, rs.getString("MName"), rs.getString("MSource"));
+                    encounter.addMonster(monster);
+                }
 
                 encounter.addMonsterEntry(new MonsterEntry(
-                    monster, rs.getString("Alias"), rs.getString("Notes")
+                    mName, mSource, monster, rs.getString("Alias"), rs.getString("Notes")
                 ));
         }
 

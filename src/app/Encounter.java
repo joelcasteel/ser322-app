@@ -10,10 +10,30 @@ public class Encounter {
     private String description;
     private String notes;
 
-    private List<MonsterEntry> monsters;
+
+    private List<MonsterEntry> monsterEntries;
+    private List<Monster> monsters;
 
     public Encounter() {
+        monsterEntries = new ArrayList<>();
         monsters = new ArrayList<>();
+    }
+
+    public Monster getMonster(String mName, String mSource) {
+        for(int i = 0; i < monsters.size(); i++) {
+            Monster monster = monsters.get(i);
+
+            if(monster.getName().equals(mName) && monster.getSource().equals(mSource)) {
+                return monster;
+            }
+        }
+
+        return null;
+
+    }
+
+    public void addMonster(Monster monster) {
+        monsters.add(monster);
     }
 
     public void setTitle(String pEName, String pUsername) {
@@ -56,15 +76,15 @@ public class Encounter {
     }
 
     public void addMonsterEntry(MonsterEntry monsterEntry) {
-        monsters.add(monsterEntry);
+        monsterEntries.add(monsterEntry);
     }
 
     public MonsterEntry getMonsterEntry(int i) {
-        return monsters.get(i);
+        return monsterEntries.get(i);
     }
 
     public int getNumberEntries() {
-        return monsters.size();
+        return monsterEntries.size();
     }
 
 }

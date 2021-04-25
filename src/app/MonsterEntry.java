@@ -1,25 +1,50 @@
 package app;
 
 public class MonsterEntry {
+
+    private String mName;
+    private String mSource;
+
     private Monster monster;
+
 
     private String alias;
     private String notes;
 
-    public MonsterEntry(Monster pMonster, String pAlias, String pNotes) {
+    public MonsterEntry(String pMName, String pMSource, Monster pMonster, String pAlias, String pNotes) {
+        mName = pMName;
+        mSource = pMSource;
         monster = pMonster;
         alias = pAlias;
         notes = pNotes;
     }
 
 
-    public Monster getMonster() {
-        return monster;
+    public String getMName() {
+        return this.mName;
     }
 
-    public void setMonster(Monster pMonster) {
-        monster = pMonster;
+    public void setMName(String mName) {
+        this.mName = mName;
     }
+
+    public String getMSource() {
+        return this.mSource;
+    }
+
+    public void setMSource(String mSource) {
+        this.mSource = mSource;
+    }
+
+
+    public Monster getMonster() {
+        return this.monster;
+    }
+
+    public void setMonster(Monster monster) {
+        this.monster = monster;
+    }
+    
 
     public String getAlias() {
         return this.alias;
@@ -36,5 +61,4 @@ public class MonsterEntry {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-
 }
