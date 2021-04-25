@@ -1,5 +1,5 @@
 
-import ui.MainPage;
+import ui.guiDev;
 
 import java.sql.*;
 
@@ -34,8 +34,8 @@ public class Main {
 
             }
         }
-
-        new MainPage();
+        guiDev gui = new guiDev();
+        
 
     }
 
