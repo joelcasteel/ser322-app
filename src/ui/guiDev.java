@@ -2,8 +2,7 @@ package ui;
 
 import javax.swing.*;
 
-import app.Monster;
-import app.MonsterFactory;
+import app.*;
 
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -124,7 +123,14 @@ public class guiDev extends JFrame {
 		JButton btnSearchEncounter = new JButton("Search Encounter");
 		btnSearchEncounter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				String name = txtEncounterName.getText();
+				String username = textUserName.getText();
+
+				Encounter encounter = EncounterFactory.createEncounter(name, username);
+
+				textDescription.setText(encounter.getDescription());
+				textDifficulty.setText(encounter.getDifficulty());
+				textEncounterNotes.setText(encounter.getNotes());
 			}
 		});
 		encounterPanel.add(btnSearchEncounter);

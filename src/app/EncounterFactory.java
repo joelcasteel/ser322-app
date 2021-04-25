@@ -43,7 +43,7 @@ public class EncounterFactory {
 
             encounter.setDescription(rs.getString("Description"));
             encounter.setNotes(rs.getString("Notes"));
-            encounter.setDifficulty("None");
+            encounter.setDifficulty(rs.getString("Difficulty"));
 
         } catch(Exception exception) {
             exception.printStackTrace();
