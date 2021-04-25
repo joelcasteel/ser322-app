@@ -21,7 +21,10 @@ public class Main {
 
             Monster monster = MonsterFactory.createMonster(conn, "Goblin", "MM");
             monster.getCon();
-        
+
+            Encounter encounter = EncounterFactory.createEncounter(conn, "Two Much Pudding", "emagoffi");
+            encounter.getDescription();
+
         } catch (Exception exception) {
             exception.printStackTrace();
 

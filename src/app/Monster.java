@@ -26,6 +26,8 @@ public class Monster {
     private int ac;
     private double cr;
 
+    private int legendCount;
+
     //Descriptors
     private String type;
     private String size;
@@ -37,12 +39,21 @@ public class Monster {
     private List<String> condImmunities;
     private List<String> languages;
 
+    private List<Action> actions;
+    private List<LegendaryAction> legendaryActions;
+
+    private List<Passive> passives;
+
     public Monster() {
         stats = new HashMap<>();
         
         senses = new ArrayList<>();
         condImmunities = new ArrayList<>();
         languages = new ArrayList<>();
+
+        actions = new ArrayList<>();
+        legendaryActions = new ArrayList<>();
+        passives = new ArrayList<>();
     }
 
     public void setTitle(String pName, String pSource) {
@@ -153,6 +164,14 @@ public class Monster {
         this.cr = cr;
     }
 
+    public int getLegendCount() {
+        return this.legendCount;
+    }
+
+    public void setLegendCount(int leg) {
+        this.legendCount = leg;
+    }
+
     public String getType() {
         return this.type;
     }
@@ -209,6 +228,30 @@ public class Monster {
         this.languages.add(lang);
     }
     
+    public void addAction(Action action) {
+        actions.add(action);
+    }
 
+    public Action getAction(int i) {
+        return actions.get(i);
+    }
+
+    public void addLegendaryAction(LegendaryAction legendaryAction) {
+        legendaryActions.add(legendaryAction);
+    }
+
+    public LegendaryAction gLegendaryAction(int i) {
+        return legendaryActions.get(i);
+    }
+
+    public void addPassive(Passive passive) {
+        passives.add(passive);
+    }
+
+    public Passive getPassive(int i) {
+        return passives.get(i);
+    }
+
+    
     
 }
