@@ -212,8 +212,8 @@ public class Monster {
         this.alignment = alignment;
     }
 
-    public String getSense(int i) {
-        return this.senses.get(i);
+    public List<String> getSenseList() {
+        return this.senses;
     }
 
     public void addSense(String sense) {

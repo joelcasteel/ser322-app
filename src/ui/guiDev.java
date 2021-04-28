@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -64,6 +65,9 @@ public class guiDev extends JFrame {
 		txtMonsterSource.setColumns(10);
 		MonsterSearchBarPanel.add(txtMonsterSource);
 		
+		JPanel monsterCardPanel = new JPanel();
+		monsterCardPanel.setBackground(Color.GREEN);
+		
 		JButton btnMonsterSearch = new JButton("Search Monster");
 		btnMonsterSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -72,15 +76,49 @@ public class guiDev extends JFrame {
 
 				Monster monster = MonsterFactory.createMonster(name, source);
 				monster.getAc();
+				
+				if (monster != null) {
+					System.out.println("Adding searched monster panel...");
+
+					//Remove all previous elements from the panel
+					monsterCardPanel.removeAll();
+
+					//Add the statblock label
+					String statsBlock = "STR: " + monster.getStr() + "\nDEX: " + monster.getDex() + "\nCON: " + monster.getCon() + "\nINT: " + monster.getIntl() +
+							"\nWIS: " + monster.getWis() + "\nCHA: " + monster.getCha();
+					JLabel statBlock = new JLabel(statsBlock);
+					monsterCardPanel.add(statBlock);
+					
+					//Add the hp, armor class, challenge rating, and legendary count label
+					String hpAcCr = "HP: " + monster.getHp() + "\nArmor Class: " + monster.getAc() + "\nChallenge Rating: " + monster.getCr() + 
+							"\nLegendary Action Count: " + monster.getLegendCount();
+					JLabel hpBlock = new JLabel(hpAcCr);
+					monsterCardPanel.add(hpBlock);
+					
+					String descriptors = "Type: " + monster.getType() + "\nSize: " + monster.getSize() + "\nSpeed: " + monster.getSpeed() + "\nAlignment: " + monster.getAlignment();
+					JLabel descriptorBlock = new JLabel(descriptors);
+					monsterCardPanel.add(descriptorBlock);
+					
+					List<String> senses = monster.getSenseList();
+					String senseStr = "Senses: ";
+					for (String s : senses) {
+						senseStr += s + "\n";
+					}
+					JLabel sensesLabel = new JLabel(senseStr);
+					monsterCardPanel.add(sensesLabel);
+					
+					
+					monsterCardPanel.updateUI();
+
+				}
 			}
 		});
 		MonsterSearchBarPanel.add(btnMonsterSearch);
 		
-		JPanel monsterCardPanel = new JPanel();
-		ImageIcon icon = new ImageIcon("src\\resources\\monsterCardBG.png");
-		JLabel thumb = new JLabel();
-		thumb.setIcon(icon);
-		monsterCardPanel.add(thumb);
+	
+
+		
+		
 		
 		monsterSearchPanel.add(monsterCardPanel, BorderLayout.CENTER);
 		
@@ -184,14 +222,7 @@ public class guiDev extends JFrame {
 		
 		JPanel monsterCardsList = new JPanel();
 		monsterCardsList.setLayout(new BoxLayout(monsterCardsList, BoxLayout.Y_AXIS));
-		monsterCardsList.setSize(604, 2000);
-		JLabel thumb2 = new JLabel();
-		thumb2.setIcon(icon);
-		JLabel thumb3 = new JLabel();
-		thumb3.setIcon(icon);
-		JLabel specialIcon = new JLabel();
-		ImageIcon icon2 = new ImageIcon("src\\resources\\damagetype\\acid.png");
-		specialIcon.setIcon(icon2);
+
 		
 		
 		JPanel monsterCard1 = new JPanel();
@@ -200,32 +231,14 @@ public class guiDev extends JFrame {
 
 		JLabel testtxt = new JLabel("test");
 
-		//JPanel monsterCard2 = new JPanel();
-		
-		Painter p = new Painter();
-		p.addText();
-		Painter p2 = new Painter();
-		Painter p3 = new Painter();
 
-		//monsterCard1.add(p, BorderLayout.CENTER);
-		//monsterCard1.setSize(604,510);
-		//monsterCard1.setBackground(Color.BLACK);
-		monsterCard2.add(p2);
-		monsterCard3.add(p3);
 
-		//p.setNextLayer();
-		
-		//monsterCard2 = p.getPanel();
-		//monsterCard2.add(testtxt);
-	
-		//monsterCard1.add(thumb2, JLayeredPane.DEFAULT_LAYER);
+		monsterCard1.setBackground(Color.BLACK);
+		monsterCard1.setSize(604, 2000);
+		monsterCard2.setBackground(Color.BLUE);
 
-		//monsterCard1.add(testtxt, 1);
-		//monsterCard1.add(thumb3, 0);
+		monsterCard3.setBackground(Color.cyan);
 
-		
-		//monsterCard2.add(thumb3);
-		//monsterCard2.add(specialIcon);
 
 		monsterCardsList.add(monsterCard1);
 		monsterCardsList.add(monsterCard2);
@@ -234,7 +247,7 @@ public class guiDev extends JFrame {
 
 		monsterCardsList.setAutoscrolls(true);
 		
-		JScrollPane monstersInEncounterScrollPane = new JScrollPane(monsterCard1);
+		JScrollPane monstersInEncounterScrollPane = new JScrollPane(monsterCardsList);
 		monstersInEncounterScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		monstersInEncounterScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		monstersInEncounterScrollPane.setBounds(526, 60, 604, 510);
@@ -247,32 +260,5 @@ public class guiDev extends JFrame {
 		this.setVisible(true);
 		this.setSize(1162, 618);
 		this.setResizable(false);
-	}
-}
-
-
-class Painter extends JPanel {
-	private Image img;
-	
-	public Painter() {
-		try {
-			img = ImageIO.read(new File("src\\resources\\monsterCardBG.png"));
-		}
-		catch (Exception E) {
-			E.printStackTrace();
-		}
-		this.setBackground(Color.RED);
-		this.setMinimumSize(new Dimension(604, 510));
-	}
-	
-	public void addText() {
-		JLabel txt = new JLabel("asdf;lkajsdfoasjdfo;asjdfoasjdflskajdflaksj");
-		this.add(txt);
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-	    super.paintComponent(g); 
-	    g.drawImage(img, 0, 0, this);   
 	}
 }
