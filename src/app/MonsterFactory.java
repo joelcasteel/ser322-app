@@ -22,6 +22,8 @@ public class MonsterFactory {
             addMonsterActions(conn, monster, name, source);
             addMonsterLegendaryActions(conn, monster, name, source);
             addMonsterPassives(conn, monster, name, source);
+            addMonsterSkills(conn, monster, name, source);
+            addMonsterSaves(conn, monster, name, source);
 
         } catch(Exception exception) {
 
@@ -266,4 +268,70 @@ public class MonsterFactory {
             
         }
     }
+
+    private static void addMonsterSkills(Connection conn, Monster monster, String name, String source) {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT SkillType, Score FROM HAS_SKILL WHERE MName = ? AND MSource = ?");
+            stmt.setString(1, name);
+            stmt.setString(2, source);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                monster.addSkill(
+                    new Skill(rs.getString("SkillType"),
+                    rs.getInt("Score")
+                ));
+        }
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+    }
+
+    private static void addMonsterSaves(Connection conn, Monster monster, String name, String source) {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        try {
+            stmt = conn.prepareStatement("SELECT SaveType, Score FROM HAS_SAVE WHERE MName = ? AND MSource = ?");
+            stmt.setString(1, name);
+            stmt.setString(2, source);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                monster.addSave(
+                    new Skill(rs.getString("SaveType"),
+                    rs.getInt("Score")
+                ));
+        }
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+    }
+
+    
 }

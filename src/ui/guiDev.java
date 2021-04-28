@@ -126,7 +126,7 @@ public class guiDev extends JFrame {
 				String name = txtEncounterName.getText();
 				String username = textUserName.getText();
 
-				Encounter encounter = EncounterFactory.createEncounter(name, username);
+				Encounter encounter = EncounterFactory.getEncounter(name, username);
 
 				textDescription.setText(encounter.getDescription());
 				textDifficulty.setText(encounter.getDifficulty());

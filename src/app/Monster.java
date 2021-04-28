@@ -39,10 +39,15 @@ public class Monster {
     private List<String> condImmunities;
     private List<String> languages;
 
+    private List<String> damageImmunities;
+    private List<String> damageVulnerabilities;
+
     private List<Action> actions;
     private List<LegendaryAction> legendaryActions;
-
     private List<Passive> passives;
+
+    private List<Skill> skills;
+    private List<Skill> saves;
 
     public Monster() {
         stats = new HashMap<>();
@@ -252,6 +257,36 @@ public class Monster {
         return passives.get(i);
     }
 
-    
-    
+    public void addDamageVulnerability(String damage) {
+        damageVulnerabilities.add(damage);
+    }
+
+    public String getDamageVulnerability(int i) {
+        return damageVulnerabilities.get(i);
+    }
+
+    public void addDamageImmunity(String damage) {
+        damageImmunities.add(damage);
+    }
+
+    public String getDamageImmunity(int i) {
+        return damageImmunities.get(i);
+    }
+
+    public void addSkill(Skill skill) {
+        skills.add(skill);
+    }
+
+    public Skill getSkill(int i) {
+        return skills.get(i);
+    }
+
+    public void addSave(Skill save) {
+        saves.add(save);
+    }
+
+    public Skill getSave(int i) {
+        return saves.get(i);
+    }
+
 }
