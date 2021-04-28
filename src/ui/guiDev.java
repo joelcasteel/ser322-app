@@ -171,6 +171,10 @@ public class guiDev extends JFrame {
 		
 		JPanel monsterCardsList = new JPanel();
 		monsterCardsList.setAutoscrolls(true);
+
+		for(MonsterEntry entry: encounter.getMonsterEntryList()) {
+			
+		}
 		
 		JScrollPane monstersInEncounterScrollPane = new JScrollPane(monsterCardsList);
 		monstersInEncounterScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
