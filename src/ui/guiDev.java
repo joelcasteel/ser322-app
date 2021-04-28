@@ -144,13 +144,26 @@ public class guiDev extends JFrame {
 		JButton btnSaveEncounter = new JButton("Save Encounter");
 		btnSaveEncounter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					String name = txtEncounterName.getText();
-					String username = textUserName.getText();
-					String description = textDescription.getText();
-					String notes = textEncounterNotes.getText();
-					String difficulty = textDifficulty.getText();
 
-					EncounterFactory.saveEncounter(name, description, notes, difficulty, username);
+				String name = txtEncounterName.getText();
+				String username = textUserName.getText();
+				String description = textDescription.getText();
+				String notes = textEncounterNotes.getText();
+				String difficulty = textDifficulty.getText();
+
+				if(encounter == null) {
+					encounter = EncounterFactory.createEncounter(name, username, description, notes);
+
+				} else {
+					encounter.setTitle(name, username);
+					encounter.setDescription(description);
+					encounter.setNotes(notes);
+					encounter.setDifficulty(difficulty);
+
+				}
+					
+
+					EncounterFactory.saveEncounter(encounter);
 					
 			}
 		});

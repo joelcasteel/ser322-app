@@ -12,11 +12,18 @@ public class Encounter {
 
 
     private List<MonsterEntry> monsterEntries;
+    private List<MonsterEntry> monstersToAdd;
+    private List<MonsterEntry> monstersToRemove;
+
+
     private List<Monster> monsters;
 
     public Encounter() {
         monsterEntries = new ArrayList<>();
         monsters = new ArrayList<>();
+
+        monstersToAdd = new ArrayList<>();
+        monstersToRemove = new ArrayList<>();
     }
 
     public Monster getMonster(String mName, String mSource) {
@@ -31,6 +38,32 @@ public class Encounter {
         return null;
 
     }
+
+    public void addMonsterEnty(MonsterEntry monster) {
+        monsterEntries.add(monster);
+        monsters.add(monster.getMonster());
+
+        if(monstersToRemove.contains(monster)) {
+            monstersToRemove.remove(monster);
+
+        } else {
+            monstersToAdd.add(monster);
+
+        }
+    }
+
+    public void removeMonsterEntry(MonsterEntry monster) {
+        monsterEntries.remove(monster);
+
+        if(monstersToAdd.contains(monster)) {
+            monstersToAdd.remove(monster);
+
+        } else {
+            monstersToRemove.add(monster);
+
+        }
+    }
+
 
     public void addMonster(Monster monster) {
         monsters.add(monster);
@@ -75,7 +108,7 @@ public class Encounter {
         this.notes = notes;
     }
 
-    public void addMonsterEntry(MonsterEntry monsterEntry) {
+    public void addMonsterEntryFromDB(MonsterEntry monsterEntry) {
         monsterEntries.add(monsterEntry);
     }
 

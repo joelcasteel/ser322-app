@@ -83,7 +83,7 @@ public class EncounterFactory {
                     encounter.addMonster(monster);
                 }
 
-                encounter.addMonsterEntry(new MonsterEntry(
+                encounter.addMonsterEntryFromDB(new MonsterEntry(
                     mName, mSource, monster, rs.getString("Alias"), rs.getString("Notes")
                 ));
         }
@@ -116,19 +116,18 @@ public class EncounterFactory {
     }
 
 
-    public static boolean saveEncounter(String name, String description, String notes, String difficulty, String username) {
+    public static boolean saveEncounter(Encounter encounter) {
         Connection conn = null;
+        boolean success = false;
 
         try {
             conn = ConnectionFactory.getConnection();
 
-            boolean success = false;
-
-            if(checkExists(conn, name, username)) {
-                success = updateEncounter(conn, name, description, notes, difficulty, username);
+            if(checkExists(conn, encounter.getEName(), encounter.getUsername())) {
+                success = updateEncounter(conn, encounter.getEName(), encounter.getDescription(), encounter.getNotes(), encounter.getDifficulty(), encounter.getUsername());
 
             } else {
-                success = insertEncounter(conn, name, description, notes, difficulty, username);
+                success = insertEncounter(conn, encounter.getEName(), encounter.getDescription(), encounter.getNotes(), encounter.getDifficulty(), encounter.getUsername());
 
             }
 
@@ -151,7 +150,7 @@ public class EncounterFactory {
             }
         }
 
-        return true;
+        return success;
     }
 
     private static boolean checkExists(Connection conn, String eName, String username) {
@@ -253,4 +252,13 @@ public class EncounterFactory {
         }
         return saved;
     }
+
+    private static void addMonsterEntries(Connection conn, Encounter encounter) {
+
+    }
+
+    private static void removerMonsterEntries(Connection conn, Encounter encounter) {
+        
+    }
+
 }
