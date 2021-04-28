@@ -5,6 +5,8 @@ import javax.swing.*;
 import app.*;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
@@ -12,16 +14,16 @@ import java.awt.FlowLayout;
 
 
 public class guiDev extends JFrame {
-	private JTextField txtMonsterName;
-	private JTextField txtMonsterSource;
-	private JTextField txtMonsterAlias;
-	private JTextField txtMonsterNotes;
-	private JTextField txtEncounterName;
-	private JTextField textUserName;
-	private JTextField textDifficulty;
-	private JTextField textDescription;
-	private JTextField textEncounterNotes;
-	private JTextField textField;
+	private HintTextField txtMonsterName;
+	private HintTextField txtMonsterSource;
+	private HintTextField txtMonsterAlias;
+	private HintTextField txtMonsterNotes;
+	private HintTextField txtEncounterName;
+	private HintTextField textUserName;
+	private HintTextField textDifficulty;
+	private HintTextField textDescription;
+	private HintTextField textEncounterNotes;
+	private HintTextField textField;
 
 	private Encounter encounter = null;
 	
@@ -46,13 +48,11 @@ public class guiDev extends JFrame {
 		monsterSearchPanel.add(MonsterSearchBarPanel, BorderLayout.NORTH);
 		MonsterSearchBarPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		txtMonsterName = new JTextField();
-		txtMonsterName.setText("Monster Name");
+		txtMonsterName = new HintTextField("Monster Name");
 		txtMonsterName.setColumns(10);
 		MonsterSearchBarPanel.add(txtMonsterName);
 		
-		txtMonsterSource = new JTextField();
-		txtMonsterSource.setText("Monster Source");
+		txtMonsterSource = new HintTextField("Monster Source");
 		txtMonsterSource.setColumns(10);
 		MonsterSearchBarPanel.add(txtMonsterSource);
 		
@@ -74,13 +74,11 @@ public class guiDev extends JFrame {
 		JPanel addMonsterPanel = new JPanel();
 		monsterSearchPanel.add(addMonsterPanel, BorderLayout.SOUTH);
 		
-		txtMonsterAlias = new JTextField();
-		txtMonsterAlias.setText("Monster Alias");
+		txtMonsterAlias = new HintTextField("Monster Alias");
 		addMonsterPanel.add(txtMonsterAlias);
 		txtMonsterAlias.setColumns(10);
 		
-		txtMonsterNotes = new JTextField();
-		txtMonsterNotes.setText("Monster Notes");
+		txtMonsterNotes = new HintTextField("Monster Notes");
 		addMonsterPanel.add(txtMonsterNotes);
 		txtMonsterNotes.setColumns(10);
 		
@@ -97,28 +95,23 @@ public class guiDev extends JFrame {
 		mainPanel.add(encounterPanel);
 		encounterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		txtEncounterName = new JTextField();
-		txtEncounterName.setText("Encounter Name");
+		txtEncounterName = new HintTextField("Encounter Name");
 		txtEncounterName.setColumns(10);
 		encounterPanel.add(txtEncounterName);
 		
-		textUserName = new JTextField();
-		textUserName.setText("Username");
+		textUserName = new HintTextField("Username");
 		textUserName.setColumns(10);
 		encounterPanel.add(textUserName);
 		
-		textDifficulty = new JTextField();
-		textDifficulty.setText("Difficulty");
+		textDifficulty = new HintTextField("Difficulty");
 		textDifficulty.setColumns(10);
 		encounterPanel.add(textDifficulty);
 		
-		textDescription = new JTextField();
-		textDescription.setText("Description");
+		textDescription = new HintTextField("Description");
 		textDescription.setColumns(10);
 		encounterPanel.add(textDescription);
 		
-		textEncounterNotes = new JTextField();
-		textEncounterNotes.setText("Notes");
+		textEncounterNotes = new HintTextField("Notes");
 		textEncounterNotes.setColumns(10);
 		encounterPanel.add(textEncounterNotes);
 		
@@ -186,3 +179,37 @@ public class guiDev extends JFrame {
 		this.setResizable(false);
 	}
 }
+
+// source: https://stackoverflow.com/questions/1738966/java-jtextfield-with-input-hint
+class HintTextField extends JTextField implements FocusListener {
+
+    private final String hint;
+    private boolean showingHint;
+
+    public HintTextField(final String hint) {
+      super(hint);
+      this.hint = hint;
+      this.showingHint = true;
+      super.addFocusListener(this);
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+      if(this.getText().isEmpty()) {
+        super.setText("");
+        showingHint = false;
+      }
+    }
+    @Override
+    public void focusLost(FocusEvent e) {
+      if(this.getText().isEmpty()) {
+        super.setText(hint);
+        showingHint = true;
+      }
+    }
+
+    @Override
+    public String getText() {
+      return showingHint ? "" : super.getText();
+    }
+  }
