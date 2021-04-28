@@ -22,6 +22,7 @@ public class MonsterCardholder extends JPanel {
 
 
         JButton removeButton = new JButton("Remove");
+        
         removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -30,7 +31,8 @@ public class MonsterCardholder extends JPanel {
                 revalidate();
 			}
 		});
-        this.add(removeButton, BorderLayout.NORTH);
+        this.add(new JLabel("HEY"));
+        this.add(removeButton);
 
     }
 }

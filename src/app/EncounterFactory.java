@@ -1,6 +1,7 @@
 package app;
 
 import java.sql.*;
+import java.util.List;
 
 public class EncounterFactory {
     public static Encounter getEncounter(String eName, String username) {
@@ -86,6 +87,9 @@ public class EncounterFactory {
                 encounter.addMonsterEntryFromDB(new MonsterEntry(
                     mName, mSource, monster, rs.getString("Alias"), rs.getString("Notes")
                 ));
+
+                Encounter e = encounter;
+                e.getAddList();
         }
 
         } catch(Exception exception) {
