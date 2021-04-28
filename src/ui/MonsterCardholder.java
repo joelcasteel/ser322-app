@@ -24,7 +24,7 @@ public class MonsterCardholder extends JPanel {
         JButton removeButton = new JButton("Remove");
         removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Remove code goes here
+				
                 encounter.removeMonsterEntry(entry);
                 containerPanel.remove(self);
                 revalidate();
