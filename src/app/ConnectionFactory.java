@@ -17,7 +17,9 @@ public class ConnectionFactory {
     }
 
     public static Connection getConnection() throws Exception {
-        return DriverManager.getConnection(url, username, password);
+        Connection conn = DriverManager.getConnection(url, username, password);
+        conn.setAutoCommit(false);
+        return conn;
     }
 
     

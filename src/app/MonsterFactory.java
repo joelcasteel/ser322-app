@@ -279,6 +279,8 @@ public class MonsterFactory {
             rs = stmt.executeQuery();
 
             while(rs.next()) {
+                String s = rs.getString("SkillType");
+                int i = rs.getInt("Score");
                 monster.addSkill(
                     new Skill(rs.getString("SkillType"),
                     rs.getInt("Score")

@@ -22,6 +22,8 @@ public class guiDev extends JFrame {
 	private JTextField textDescription;
 	private JTextField textEncounterNotes;
 	private JTextField textField;
+
+	private Encounter encounter = null;
 	
 	public void run() {
 	}
@@ -126,11 +128,15 @@ public class guiDev extends JFrame {
 				String name = txtEncounterName.getText();
 				String username = textUserName.getText();
 
-				Encounter encounter = EncounterFactory.getEncounter(name, username);
+				Encounter result = EncounterFactory.getEncounter(name, username);
+				if(result != null) {
+					encounter = result;
+					textDescription.setText(encounter.getDescription());
+					textDifficulty.setText(encounter.getDifficulty());
+					textEncounterNotes.setText(encounter.getNotes());
+				}
 
-				textDescription.setText(encounter.getDescription());
-				textDifficulty.setText(encounter.getDifficulty());
-				textEncounterNotes.setText(encounter.getNotes());
+				encounter = EncounterFactory.createEncounter(name, username, textDescription.getText(), textEncounterNotes.getText());
 			}
 		});
 		encounterPanel.add(btnSearchEncounter);
@@ -138,7 +144,14 @@ public class guiDev extends JFrame {
 		JButton btnSaveEncounter = new JButton("Save Encounter");
 		btnSaveEncounter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+					String name = txtEncounterName.getText();
+					String username = textUserName.getText();
+					String description = textDescription.getText();
+					String notes = textEncounterNotes.getText();
+					String difficulty = textDifficulty.getText();
+
+					EncounterFactory.saveEncounter(name, description, notes, difficulty, username);
+					
 			}
 		});
 		encounterPanel.add(btnSaveEncounter);

@@ -4,14 +4,17 @@ import java.sql.*;
 
 public class EncounterFactory {
     public static Encounter getEncounter(String eName, String username) {
-        Encounter encounter = new Encounter();
+        Encounter encounter = null;
         Connection conn = null;
 
         try {
             conn = ConnectionFactory.getConnection();
+                if(checkExists(conn, eName, username)) {
+                    encounter = new Encounter();
+                    setEncounterBase(conn, encounter, eName, username);
+                    addMonsterEntries(conn, encounter, eName, username);
+                }
 
-        setEncounterBase(conn, encounter, eName, username);
-        addMonsterEntries(conn, encounter, eName, username);
 
         } catch(Exception exception) {
             exception.printStackTrace();
@@ -112,19 +115,30 @@ public class EncounterFactory {
         return encounter;
     }
 
-    public static boolean saveEncounter(Encounter encounter) {
+
+    public static boolean saveEncounter(String name, String description, String notes, String difficulty, String username) {
         Connection conn = null;
 
         try {
             conn = ConnectionFactory.getConnection();
-            if(checkExists(conn, encounter)) {
 
+            boolean success = false;
+
+            if(checkExists(conn, name, username)) {
+                success = updateEncounter(conn, name, description, notes, difficulty, username);
 
             } else {
-
+                success = insertEncounter(conn, name, description, notes, difficulty, username);
 
             }
 
+            if(success) {
+                conn.commit();
+
+            } else {
+                conn.rollback();
+
+            }
         } catch(Exception exception) {
             exception.printStackTrace();
 
@@ -140,7 +154,7 @@ public class EncounterFactory {
         return true;
     }
 
-    private static boolean checkExists(Connection conn, Encounter encounter) {
+    private static boolean checkExists(Connection conn, String eName, String username) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
 
@@ -148,6 +162,8 @@ public class EncounterFactory {
 
         try {
             stmt = conn.prepareStatement("SELECT MName, MSource, Alias, Notes FROM CONSISTS_OF WHERE EName = ? AND Username = ?");
+            stmt.setString(1, eName);
+            stmt.setString(2, username);
             rs = stmt.executeQuery();
 
             exists = rs.next();
@@ -170,18 +186,53 @@ public class EncounterFactory {
         return exists;
     }
 
-    private static boolean saveEncounter(Connection conn, Encounter encounter) {
+    private static boolean insertEncounter(Connection conn, String name, String description, String notes, String difficulty, String username ) {
         PreparedStatement stmt = null;
 
         boolean saved = false;
 
         try {
-            stmt = conn.prepareStatement("INSERT into ENCOUNTER(EName, Username, Description, Notes, Difficulty) VALUES (?, ?, ?, ?,?);");
-            stmt.setString(1, encounter.getEName());
-            stmt.setString(2, encounter.getUsername());
-            stmt.setString(3, encounter.getDescription());
-            stmt.setString(4, encounter.getNotes());
-            stmt.setString(5, encounter.getDifficulty());
+            stmt = conn.prepareStatement("INSERT into ENCOUNTER(EName, Description, Notes, Difficulty, Username) VALUES (?, ?, ?, ?, ?);");
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setString(3, notes);
+            stmt.setString(4, difficulty);
+            stmt.setString(5, username);
+            int count = stmt.executeUpdate();
+
+            saved = (count > 0);
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                stmt.close();
+                
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+        return saved;
+    }
+
+    private static boolean updateEncounter(Connection conn, String name, String description, String notes, String difficulty, String username) {
+        PreparedStatement stmt = null;
+
+        boolean saved = false;
+
+        try {
+            stmt = conn.prepareStatement("UPDATE ENCOUNTER SET Description=?, Notes=?, Difficulty=? WHERE EName=? AND Username=?");
+            stmt.setString(1, description);
+            stmt.setString(2, notes);
+            stmt.setString(3, difficulty);
+            
+
+            stmt.setString(4, name);
+            stmt.setString(5, username);
             int count = stmt.executeUpdate();
 
             saved = (count > 0);

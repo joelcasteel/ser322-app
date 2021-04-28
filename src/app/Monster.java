@@ -59,6 +59,9 @@ public class Monster {
         actions = new ArrayList<>();
         legendaryActions = new ArrayList<>();
         passives = new ArrayList<>();
+
+        skills = new ArrayList<>();
+        saves = new ArrayList<>();
     }
 
     public void setTitle(String pName, String pSource) {

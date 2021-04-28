@@ -27,6 +27,8 @@ public class Main {
             Encounter encounter = EncounterFactory.getEncounter("Two Much Pudding", "emagoffi");
             encounter.getDescription();
 
+            
+
         guiDev gui = new guiDev();
         
 
