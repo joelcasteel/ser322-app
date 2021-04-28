@@ -24,7 +24,7 @@ public class Main {
             Monster monster = MonsterFactory.createMonster("Goblin", "MM");
             monster.getCon();
 
-            Encounter encounter = EncounterFactory.getEncounter("Two Much Pudding", "emagoffi");
+            Encounter encounter = EncounterFactory.getEncounter("Fight", "epic_gamer");
             encounter.getDescription();
 
             
