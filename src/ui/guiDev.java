@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.*;
 
+
 import app.*;
 
 import java.awt.event.ActionListener;
@@ -10,7 +11,9 @@ import java.awt.event.FocusListener;
 import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 
 public class guiDev extends JFrame {
     private HintTextField txtMonsterName;
@@ -43,6 +46,11 @@ public class guiDev extends JFrame {
         monsterSearchPanel.setBounds(0, 0, 527, 570);
         mainPanel.add(monsterSearchPanel);
         monsterSearchPanel.setLayout(new BorderLayout(0, 0));
+        
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 4);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 4);
+        this.setLocation(x, y);
 
         JPanel MonsterSearchBarPanel = new JPanel();
         monsterSearchPanel.add(MonsterSearchBarPanel, BorderLayout.NORTH);
