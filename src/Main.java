@@ -3,6 +3,8 @@ import ui.guiDev;
 
 import java.sql.*;
 
+import javax.swing.WindowConstants;
+
 import app.*;
 
 public class Main {
@@ -30,7 +32,7 @@ public class Main {
             
 
         guiDev gui = new guiDev();
-        
+        gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     }
 

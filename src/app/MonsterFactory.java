@@ -49,7 +49,10 @@ public class MonsterFactory {
             stmt.setString(2, source);
 
             rs = stmt.executeQuery();
-            rs.next();
+            
+            if(rs.next() == false) {
+                return;
+            }
 
             monster.setTitle(rs.getString("Name"), rs.getString("Source"));
 
