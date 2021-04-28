@@ -1,14 +1,22 @@
 package ui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import app.*;
 
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Component;
+import java.awt.Dimension;
 
 
 public class guiDev extends JFrame {
@@ -69,6 +77,11 @@ public class guiDev extends JFrame {
 		MonsterSearchBarPanel.add(btnMonsterSearch);
 		
 		JPanel monsterCardPanel = new JPanel();
+		ImageIcon icon = new ImageIcon("src\\resources\\monsterCardBG.png");
+		JLabel thumb = new JLabel();
+		thumb.setIcon(icon);
+		monsterCardPanel.add(thumb);
+		
 		monsterSearchPanel.add(monsterCardPanel, BorderLayout.CENTER);
 		
 		JPanel addMonsterPanel = new JPanel();
@@ -170,12 +183,62 @@ public class guiDev extends JFrame {
 		encounterPanel.add(btnSaveEncounter);
 		
 		JPanel monsterCardsList = new JPanel();
+		monsterCardsList.setLayout(new BoxLayout(monsterCardsList, BoxLayout.Y_AXIS));
+		monsterCardsList.setSize(604, 2000);
+		JLabel thumb2 = new JLabel();
+		thumb2.setIcon(icon);
+		JLabel thumb3 = new JLabel();
+		thumb3.setIcon(icon);
+		JLabel specialIcon = new JLabel();
+		ImageIcon icon2 = new ImageIcon("src\\resources\\damagetype\\acid.png");
+		specialIcon.setIcon(icon2);
+		
+		
+		JPanel monsterCard1 = new JPanel();
+		JPanel monsterCard2 = new JPanel();
+		JPanel monsterCard3 = new JPanel();
+
+		JLabel testtxt = new JLabel("test");
+
+		//JPanel monsterCard2 = new JPanel();
+		
+		Painter p = new Painter();
+		p.addText();
+		Painter p2 = new Painter();
+		Painter p3 = new Painter();
+
+		//monsterCard1.add(p, BorderLayout.CENTER);
+		//monsterCard1.setSize(604,510);
+		//monsterCard1.setBackground(Color.BLACK);
+		monsterCard2.add(p2);
+		monsterCard3.add(p3);
+
+		//p.setNextLayer();
+		
+		//monsterCard2 = p.getPanel();
+		//monsterCard2.add(testtxt);
+	
+		//monsterCard1.add(thumb2, JLayeredPane.DEFAULT_LAYER);
+
+		//monsterCard1.add(testtxt, 1);
+		//monsterCard1.add(thumb3, 0);
+
+		
+		//monsterCard2.add(thumb3);
+		//monsterCard2.add(specialIcon);
+
+		monsterCardsList.add(monsterCard1);
+		monsterCardsList.add(monsterCard2);
+		monsterCardsList.add(monsterCard3);
+
+
 		monsterCardsList.setAutoscrolls(true);
 		
-		JScrollPane monstersInEncounterScrollPane = new JScrollPane(monsterCardsList);
+		JScrollPane monstersInEncounterScrollPane = new JScrollPane(monsterCard1);
 		monstersInEncounterScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		monstersInEncounterScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		monstersInEncounterScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		monstersInEncounterScrollPane.setBounds(526, 60, 604, 510);
+		
 		
 		mainPanel.add(monstersInEncounterScrollPane);
 		
@@ -184,5 +247,32 @@ public class guiDev extends JFrame {
 		this.setVisible(true);
 		this.setSize(1162, 618);
 		this.setResizable(false);
+	}
+}
+
+
+class Painter extends JPanel {
+	private Image img;
+	
+	public Painter() {
+		try {
+			img = ImageIO.read(new File("src\\resources\\monsterCardBG.png"));
+		}
+		catch (Exception E) {
+			E.printStackTrace();
+		}
+		this.setBackground(Color.RED);
+		this.setMinimumSize(new Dimension(604, 510));
+	}
+	
+	public void addText() {
+		JLabel txt = new JLabel("asdf;lkajsdfoasjdfo;asjdfoasjdflskajdflaksj");
+		this.add(txt);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+	    super.paintComponent(g); 
+	    g.drawImage(img, 0, 0, this);   
 	}
 }

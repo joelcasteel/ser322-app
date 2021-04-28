@@ -31,6 +31,5 @@ public class MonsterCardholder extends JPanel {
 			}
 		});
         this.add(removeButton, BorderLayout.NORTH);
-
     }
 }
