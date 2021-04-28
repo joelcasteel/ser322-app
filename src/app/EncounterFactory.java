@@ -125,9 +125,12 @@ public class EncounterFactory {
 
             if(checkExists(conn, encounter.getEName(), encounter.getUsername())) {
                 success = updateEncounter(conn, encounter.getEName(), encounter.getDescription(), encounter.getNotes(), encounter.getDifficulty(), encounter.getUsername());
+                addMonsterEntries(conn, encounter);
+                removerMonsterEntries(conn, encounter);
 
             } else {
                 success = insertEncounter(conn, encounter.getEName(), encounter.getDescription(), encounter.getNotes(), encounter.getDifficulty(), encounter.getUsername());
+                addMonsterEntries(conn, encounter);
 
             }
 
@@ -253,12 +256,82 @@ public class EncounterFactory {
         return saved;
     }
 
-    private static void addMonsterEntries(Connection conn, Encounter encounter) {
+    private static boolean addMonsterEntries(Connection conn, Encounter encounter) {
+        PreparedStatement stmt = null;
 
+        boolean saved = false;
+
+        try {
+            stmt = conn.prepareStatement("INSERT INTO CONSISTS_OF(MName, MSource, EName, Alias, Notes, Username) VALUES (?, ?, ?, ?, ?, ?)");
+
+            for(MonsterEntry monster: encounter.getAddList()) {
+                stmt.setString(1, monster.getMName());
+                stmt.setString(2, monster.getMSource());
+                stmt.setString(3, encounter.getEName());
+                stmt.setString(4, monster.getAlias());
+                stmt.setString(5, monster.getNotes());
+                stmt.setString(6, encounter.getUsername());
+
+                stmt.addBatch();
+            }
+
+            int count = stmt.executeUpdate();
+
+            saved = (count > 0);
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                stmt.close();
+                
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+        return saved;
     }
 
-    private static void removerMonsterEntries(Connection conn, Encounter encounter) {
-        
+    private static boolean removerMonsterEntries(Connection conn, Encounter encounter) {
+        PreparedStatement stmt = null;
+
+        boolean saved = false;
+
+        try {
+            stmt = conn.prepareStatement("DELETE FROM CONSISTS_OF WHERE MName = ? AND MSource = ? AND EName = ? AND Username = ?");
+
+            for(MonsterEntry monster: encounter.getRemoveList()) {
+                stmt.setString(1, monster.getMName());
+                stmt.setString(2, monster.getMSource());
+                stmt.setString(3, encounter.getEName());
+                stmt.setString(4, encounter.getUsername());
+
+                stmt.addBatch();
+            }
+
+            int count = stmt.executeUpdate();
+
+            saved = (count > 0);
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                stmt.close();
+                
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+        return saved;
     }
 
 }

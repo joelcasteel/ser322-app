@@ -52,6 +52,10 @@ public class Encounter {
         }
     }
 
+    public List<MonsterEntry> getAddList() {
+        return monstersToAdd;
+    }
+
     public void removeMonsterEntry(MonsterEntry monster) {
         monsterEntries.remove(monster);
 
@@ -62,6 +66,10 @@ public class Encounter {
             monstersToRemove.add(monster);
 
         }
+    }
+
+    public List<MonsterEntry> getRemoveList() {
+        return monstersToRemove;
     }
 
 
