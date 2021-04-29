@@ -56,6 +56,7 @@ public class Encounter {
         return monstersToAdd;
     }
 
+
     public void removeMonsterEntry(MonsterEntry monster) {
         monsterEntries.remove(monster);
 

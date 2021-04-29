@@ -3,9 +3,22 @@ package app;
 import java.sql.*;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
+/**
+ * EcnounterFactory
+ *  This class manages and creates the Encounters.
+ * 
+ * 
+ */
 public class EncounterFactory {
+
+    /**
+     * Gets an encounter based of the encounter name and username.
+     * If an encounter is not found in the database, null is returned
+     * 
+     * @param eName
+     * @param username
+     * @return
+     */
     public static Encounter getEncounter(String eName, String username) {
         Encounter encounter = null;
         Connection conn = null;
@@ -33,6 +46,14 @@ public class EncounterFactory {
         return encounter;
     }
 
+    /**
+     * Sets the base attributes for the encounter from the DB
+     * 
+     * @param conn
+     * @param encounter
+     * @param eName
+     * @param username
+     */
     private static void setEncounterBase(Connection conn, Encounter encounter, String eName, String username) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -67,6 +88,14 @@ public class EncounterFactory {
         }
     }
 
+    /**
+     * Adds the moster entries associated with an encounter from the database
+     * 
+     * @param conn
+     * @param encounter
+     * @param name
+     * @param username
+     */
     private static void addMonsterEntries(Connection conn, Encounter encounter, String name, String username) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -111,6 +140,15 @@ public class EncounterFactory {
 
     }
 
+    /**
+     * Creates a brand new encounter
+     * 
+     * @param name
+     * @param username
+     * @param description
+     * @param notes
+     * @return
+     */
     public static Encounter createEncounter(String name, String username, String description, String notes) {
         Encounter encounter = new Encounter();
         encounter.setTitle(name, username);
@@ -121,6 +159,16 @@ public class EncounterFactory {
         return encounter;
     }
 
+    /**
+     * Saves an encounter to the database
+     *  If the encouter is already present -> UPDATE
+     *  If the encounter is not present -> INSERT
+     * 
+     *  If the user associated with the encounter is not present -> INSERT
+     * 
+     * @param encounter
+     * @return
+     */
     public static boolean saveEncounter(Encounter encounter) {
         Connection conn = null;
         boolean success = false;
@@ -175,6 +223,14 @@ public class EncounterFactory {
         return success;
     }
 
+    /**
+     * Checks whether an encounter exists in the database
+     * 
+     * @param conn
+     * @param eName
+     * @param username
+     * @return
+     */
     private static boolean checkExists(Connection conn, String eName, String username) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -206,6 +262,13 @@ public class EncounterFactory {
         return exists;
     }
 
+    /**
+     * Checks whether a user exists in the database
+     * 
+     * @param conn
+     * @param username
+     * @return
+     */
     private static boolean checkUserExists(Connection conn, String username) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -236,6 +299,13 @@ public class EncounterFactory {
         return exists;
     }
 
+    /**
+     * Inserts a user into the database
+     * 
+     * @param conn
+     * @param username
+     * @return
+     */
     private static boolean insertUser(Connection conn, String username) {
         PreparedStatement stmt = null;
 
@@ -264,8 +334,18 @@ public class EncounterFactory {
         return saved;
     }
 
-    private static boolean insertEncounter(Connection conn, String name, String description, String notes,
-            String difficulty, String username) {
+    /**
+     * Inserts an encounter into the database
+     * 
+     * @param conn
+     * @param name
+     * @param description
+     * @param notes
+     * @param difficulty
+     * @param username
+     * @return
+     */
+    private static boolean insertEncounter(Connection conn, String name, String description, String notes, String difficulty, String username ) {
         PreparedStatement stmt = null;
 
         boolean saved = false;
@@ -298,8 +378,18 @@ public class EncounterFactory {
         return saved;
     }
 
-    private static boolean updateEncounter(Connection conn, String name, String description, String notes,
-            String difficulty, String username) {
+    /**
+     * Updates an existing encounter in the database
+     * 
+     * @param conn
+     * @param name
+     * @param description
+     * @param notes
+     * @param difficulty
+     * @param username
+     * @return
+     */
+    private static boolean updateEncounter(Connection conn, String name, String description, String notes, String difficulty, String username) {
         PreparedStatement stmt = null;
 
         boolean saved = false;
@@ -333,6 +423,13 @@ public class EncounterFactory {
         return saved;
     }
 
+    /**
+     * Adds any new monster entries to the database
+     * 
+     * @param conn
+     * @param encounter
+     * @return
+     */
     private static boolean addMonsterEntries(Connection conn, Encounter encounter) {
         PreparedStatement stmt = null;
 
@@ -373,6 +470,13 @@ public class EncounterFactory {
         return saved;
     }
 
+    /**
+     * Removes any deleted monster entries from the database
+     * 
+     * @param conn
+     * @param encounter
+     * @return
+     */
     private static boolean removerMonsterEntries(Connection conn, Encounter encounter) {
         PreparedStatement stmt = null;
 

@@ -420,7 +420,6 @@ public class guiDev extends JFrame {
 			MonsterCard monsterCard = new MonsterCard(entry.getMonster());
 			MonsterCardholder cardHolder = new MonsterCardholder(encounter, monstersInEncounterScrollPane, newList, monsterCard, entry);
 			newList.add(cardHolder);
-			System.out.println(entry.getMName());
 		}
 
 		JPanel p = new JPanel();
