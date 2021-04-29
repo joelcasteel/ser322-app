@@ -29,11 +29,12 @@ public class MonsterCardholder extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
                 encounter.removeMonsterEntry(entry);
-                containerPanel.remove(self);
 
-                if(containerPanel.getComponents().length == 0) {
+                if(containerPanel.getComponents().length == 1) {
+                    self.setVisible(false);
                     containerPanel.add(new JLabel("No Monsters Added"));
                 }
+                    containerPanel.remove(self);
                 containerPanel.revalidate();
 			}
 		});
