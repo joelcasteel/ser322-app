@@ -3,9 +3,12 @@ package ui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+
 import app.*;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
@@ -16,23 +19,25 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Component;
 import java.awt.Dimension;
 
 
 public class guiDev extends JFrame {
-	private JTextField txtMonsterName;
-	private JTextField txtMonsterSource;
-	private JTextField txtMonsterAlias;
-	private JTextField txtMonsterNotes;
-	private JTextField txtEncounterName;
-	private JTextField textUserName;
-	private JTextField textDifficulty;
-	private JTextField textDescription;
-	private JTextField textEncounterNotes;
-	private JTextField textField;
+    private HintTextField txtMonsterName;
+    private HintTextField txtMonsterSource;
+    private HintTextField txtMonsterAlias;
+    private HintTextField txtMonsterNotes;
+    private HintTextField txtEncounterName;
+    private HintTextField textUserName;
+    private HintTextField textDifficulty;
+    private HintTextField textDescription;
+    private HintTextField textEncounterNotes;
+    private HintTextField textField;
 
 	private Encounter encounter = null;
+	private MonsterEntry monsterEntry = null;
 	
 	public void run() {
 	}
@@ -40,6 +45,13 @@ public class guiDev extends JFrame {
 	public guiDev() {
 		
 		getContentPane().setLayout(null);
+		
+      
+      Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+      int x = (int) ((dimension.getWidth() - this.getWidth()) / 4);
+      int y = (int) ((dimension.getHeight() - this.getHeight()) / 4);
+      this.setLocation(x, y);
+
 		
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, 1156, 585);
@@ -55,29 +67,34 @@ public class guiDev extends JFrame {
 		monsterSearchPanel.add(MonsterSearchBarPanel, BorderLayout.NORTH);
 		MonsterSearchBarPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		txtMonsterName = new JTextField();
-		txtMonsterName.setText("Monster Name");
-		txtMonsterName.setColumns(10);
-		MonsterSearchBarPanel.add(txtMonsterName);
 		
-		txtMonsterSource = new JTextField();
-		txtMonsterSource.setText("Monster Source");
-		txtMonsterSource.setColumns(10);
-		MonsterSearchBarPanel.add(txtMonsterSource);
-		
-		JPanel monsterCardPanel = new JPanel();
-		monsterCardPanel.setBackground(Color.GREEN);
-		
-		JButton btnMonsterSearch = new JButton("Search Monster");
-		btnMonsterSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String name = txtMonsterName.getText();
-				String source = txtMonsterSource.getText();
+	  JPanel monsterCardPanel = new JPanel();
+	  
+      txtMonsterName = new HintTextField("Monster Name");
+      txtMonsterName.setColumns(10);
+      MonsterSearchBarPanel.add(txtMonsterName);
 
-				Monster monster = MonsterFactory.createMonster(name, source);
-				monster.getAc();
-				
-				if (monster != null) {
+      txtMonsterSource = new HintTextField("Monster Source");
+      txtMonsterSource.setColumns(10);
+      MonsterSearchBarPanel.add(txtMonsterSource);
+
+      JButton btnMonsterSearch = new JButton("Search Monster");
+      btnMonsterSearch.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+              String name = txtMonsterName.getText();
+              String source = txtMonsterSource.getText();
+
+              Monster monster = MonsterFactory.createMonster(name, source);
+              // monster was not found
+              if (monster.getName() == null) {
+                  JOptionPane.showMessageDialog(null, "Monster was not found");
+                  monsterEntry = null;
+              }
+              // monster found
+              else {
+                  monsterEntry = new MonsterEntry(monster.getName(), monster.getSource(), monster,
+                          txtMonsterAlias.getText(), txtMonsterNotes.getText());
+                  
 					System.out.println("Adding searched monster panel...");
 
 					//Remove all previous elements from the panel
@@ -86,17 +103,20 @@ public class guiDev extends JFrame {
 					//Add the statblock label
 					String statsBlock = "STR: " + monster.getStr() + "\nDEX: " + monster.getDex() + "\nCON: " + monster.getCon() + "\nINT: " + monster.getIntl() +
 							"\nWIS: " + monster.getWis() + "\nCHA: " + monster.getCha();
-					JLabel statBlock = new JLabel(statsBlock);
+					JTextArea statBlock = new JTextArea(statsBlock);
+					statBlock.setEditable(false);
 					monsterCardPanel.add(statBlock);
 					
 					//Add the hp, armor class, challenge rating, and legendary count label
 					String hpAcCr = "HP: " + monster.getHp() + "\nArmor Class: " + monster.getAc() + "\nChallenge Rating: " + monster.getCr() + 
 							"\nLegendary Action Count: " + monster.getLegendCount();
-					JLabel hpBlock = new JLabel(hpAcCr);
+					JTextArea hpBlock = new JTextArea(hpAcCr);
+					hpBlock.setEditable(false);
 					monsterCardPanel.add(hpBlock);
 					
 					String descriptors = "Type: " + monster.getType() + "\nSize: " + monster.getSize() + "\nSpeed: " + monster.getSpeed() + "\nAlignment: " + monster.getAlignment();
-					JLabel descriptorBlock = new JLabel(descriptors);
+					JTextArea descriptorBlock = new JTextArea(descriptors);
+					descriptorBlock.setEditable(false);
 					monsterCardPanel.add(descriptorBlock);
 					
 					List<String> senses = monster.getSenseList();
@@ -104,15 +124,20 @@ public class guiDev extends JFrame {
 					for (String s : senses) {
 						senseStr += s + "\n";
 					}
-					JLabel sensesLabel = new JLabel(senseStr);
-					monsterCardPanel.add(sensesLabel);
+					JTextArea sensesBlock = new JTextArea(senseStr);
+					sensesBlock.setEditable(false);
+					monsterCardPanel.add(sensesBlock);
+					
+					
+					//List<String> condImm = monster.getCondImmunity(0);
+					
 					
 					
 					monsterCardPanel.updateUI();
-
-				}
-			}
-		});
+              }
+          }
+      });
+      
 		MonsterSearchBarPanel.add(btnMonsterSearch);
 		
 	
@@ -125,22 +150,26 @@ public class guiDev extends JFrame {
 		JPanel addMonsterPanel = new JPanel();
 		monsterSearchPanel.add(addMonsterPanel, BorderLayout.SOUTH);
 		
-		txtMonsterAlias = new JTextField();
-		txtMonsterAlias.setText("Monster Alias");
-		addMonsterPanel.add(txtMonsterAlias);
-		txtMonsterAlias.setColumns(10);
-		
-		txtMonsterNotes = new JTextField();
-		txtMonsterNotes.setText("Monster Notes");
-		addMonsterPanel.add(txtMonsterNotes);
-		txtMonsterNotes.setColumns(10);
-		
-		JButton btnNewButton = new JButton("Add Monster to Encounter");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
+      txtMonsterAlias = new HintTextField("Monster Alias");
+      addMonsterPanel.add(txtMonsterAlias);
+      txtMonsterAlias.setColumns(10);
+
+      txtMonsterNotes = new HintTextField("Monster Notes");
+      addMonsterPanel.add(txtMonsterNotes);
+      txtMonsterNotes.setColumns(10);
+
+      JButton btnNewButton = new JButton("Add Monster to Encounter");
+      btnNewButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+              if (encounter == null) {
+                  JOptionPane.showMessageDialog(null, "No Encounters");
+              } else if (monsterEntry == null) {
+                  JOptionPane.showMessageDialog(null, "No Monster Selected");
+              } else {
+                  encounter.addMonsterEnty(monsterEntry);
+              }
+          }
+      });
 		addMonsterPanel.add(btnNewButton);
 		
 		JPanel encounterPanel = new JPanel();
@@ -148,76 +177,76 @@ public class guiDev extends JFrame {
 		mainPanel.add(encounterPanel);
 		encounterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		txtEncounterName = new JTextField();
-		txtEncounterName.setText("Encounter Name");
-		txtEncounterName.setColumns(10);
-		encounterPanel.add(txtEncounterName);
-		
-		textUserName = new JTextField();
-		textUserName.setText("Username");
-		textUserName.setColumns(10);
-		encounterPanel.add(textUserName);
-		
-		textDifficulty = new JTextField();
-		textDifficulty.setText("Difficulty");
-		textDifficulty.setColumns(10);
-		encounterPanel.add(textDifficulty);
-		
-		textDescription = new JTextField();
-		textDescription.setText("Description");
-		textDescription.setColumns(10);
-		encounterPanel.add(textDescription);
-		
-		textEncounterNotes = new JTextField();
-		textEncounterNotes.setText("Notes");
-		textEncounterNotes.setColumns(10);
-		encounterPanel.add(textEncounterNotes);
-		
-		JButton btnSearchEncounter = new JButton("Search Encounter");
-		btnSearchEncounter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String name = txtEncounterName.getText();
-				String username = textUserName.getText();
+      txtEncounterName = new HintTextField("Encounter Name");
+      txtEncounterName.setColumns(10);
+      encounterPanel.add(txtEncounterName);
 
-				Encounter result = EncounterFactory.getEncounter(name, username);
-				if(result != null) {
-					encounter = result;
-					textDescription.setText(encounter.getDescription());
-					textDifficulty.setText(encounter.getDifficulty());
-					textEncounterNotes.setText(encounter.getNotes());
-				}
+      textUserName = new HintTextField("Username");
+      textUserName.setColumns(10);
+      encounterPanel.add(textUserName);
 
-				encounter = EncounterFactory.createEncounter(name, username, textDescription.getText(), textEncounterNotes.getText());
-			}
-		});
+      textDifficulty = new HintTextField("Difficulty");
+      textDifficulty.setColumns(10);
+      encounterPanel.add(textDifficulty);
+
+      textDescription = new HintTextField("Description");
+      textDescription.setColumns(10);
+      encounterPanel.add(textDescription);
+
+      textEncounterNotes = new HintTextField("Notes");
+      textEncounterNotes.setColumns(10);
+      encounterPanel.add(textEncounterNotes);
+
+      JButton btnSearchEncounter = new JButton("Search Encounter");
+      btnSearchEncounter.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+              String name = txtEncounterName.getText();
+              String username = textUserName.getText();
+              
+              if(name == "" || username == "") {
+                  JOptionPane.showMessageDialog(null, "Need username and Encounter name");
+                  return;
+              }
+
+              Encounter result = EncounterFactory.getEncounter(name, username);
+              if (result != null) {
+                  encounter = result;
+                  textDescription.setText(encounter.getDescription());
+                  textDifficulty.setText(encounter.getDifficulty());
+                  textEncounterNotes.setText(encounter.getNotes());
+              } else {
+
+                  encounter = EncounterFactory.createEncounter(name, username, textDescription.getText(),
+                          textEncounterNotes.getText());
+              }
+          }
+      });
 		encounterPanel.add(btnSearchEncounter);
 		
-		JButton btnSaveEncounter = new JButton("Save Encounter");
-		btnSaveEncounter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+      JButton btnSaveEncounter = new JButton("Save Encounter");
+      btnSaveEncounter.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
 
-				String name = txtEncounterName.getText();
-				String username = textUserName.getText();
-				String description = textDescription.getText();
-				String notes = textEncounterNotes.getText();
-				String difficulty = textDifficulty.getText();
+              String name = txtEncounterName.getText();
+              String username = textUserName.getText();
+              String description = textDescription.getText();
+              String notes = textEncounterNotes.getText();
+              String difficulty = textDifficulty.getText();
+              
 
-				if(encounter == null) {
-					encounter = EncounterFactory.createEncounter(name, username, description, notes);
+              if (encounter == null) {
+                  JOptionPane.showMessageDialog(null, "Please Search/Create an encounter first");
+              }else {
+                  encounter.setTitle(name, username);
+                  encounter.setDescription(description);
+                  encounter.setNotes(notes);
+                  encounter.setDifficulty(difficulty);
+                  EncounterFactory.saveEncounter(encounter);
+              }
 
-				} else {
-					encounter.setTitle(name, username);
-					encounter.setDescription(description);
-					encounter.setNotes(notes);
-					encounter.setDifficulty(difficulty);
 
-				}
-					
-
-					EncounterFactory.saveEncounter(encounter);
-					
-			}
-		});
+          }
+      });
 		encounterPanel.add(btnSaveEncounter);
 		
 		JPanel monsterCardsList = new JPanel();
@@ -261,4 +290,42 @@ public class guiDev extends JFrame {
 		this.setSize(1162, 618);
 		this.setResizable(false);
 	}
+
 }
+
+
+//source: https://stackoverflow.com/questions/1738966/java-jtextfield-with-input-hint
+class HintTextField extends JTextField implements FocusListener {
+
+ private final String hint;
+ private boolean showingHint;
+
+ public HintTextField(final String hint) {
+     super(hint);
+     this.hint = hint;
+     this.showingHint = true;
+     super.addFocusListener(this);
+ }
+
+ @Override
+ public void focusGained(FocusEvent e) {
+     if (this.getText().isEmpty()) {
+         super.setText("");
+         showingHint = false;
+     }
+ }
+
+ @Override
+ public void focusLost(FocusEvent e) {
+     if (this.getText().isEmpty()) {
+         super.setText(hint);
+         showingHint = true;
+     }
+ }
+
+ @Override
+ public String getText() {
+     return showingHint ? "" : super.getText();
+ }
+ }
+
