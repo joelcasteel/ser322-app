@@ -12,12 +12,14 @@ public class MonsterCardholder extends JPanel {
     MonsterCard monsterCard;
     MonsterEntry monsterEntry;
 
+    JScrollPane scroll;
     JPanel self;
 
-    public MonsterCardholder(Encounter encounter, JPanel panel, MonsterCard card, MonsterEntry entry) {
+    public MonsterCardholder(Encounter encounter, JScrollPane scroller, JPanel panel, MonsterCard card, MonsterEntry entry) {
         sourceEncounter = encounter;
         containerPanel = panel;
         monsterCard = card;
+        scroll = scroller;
         self = this;
 
 
@@ -28,10 +30,13 @@ public class MonsterCardholder extends JPanel {
 				
                 encounter.removeMonsterEntry(entry);
                 containerPanel.remove(self);
-                revalidate();
+
+                if(containerPanel.getComponents().length == 0) {
+                    containerPanel.add(new JLabel("No Monsters Added"));
+                }
+                containerPanel.revalidate();
 			}
 		});
-        this.add(new JLabel("HEY"));
         this.add(removeButton);
 
     }

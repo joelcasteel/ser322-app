@@ -202,7 +202,7 @@ public class guiDev extends JFrame {
 		JPanel newList = new JPanel();
 		BoxLayout layout = new BoxLayout(newList, BoxLayout.Y_AXIS);
 		newList.setLayout(layout);
-		//ewList.add(new JLabel("HELLO"));
+		//newList.add(new JLabel("Monsters"));
 
 		Encounter e = encounter;
 
@@ -211,7 +211,7 @@ public class guiDev extends JFrame {
 
 		for(MonsterEntry entry: list) {
 			MonsterCard monsterCard = new MonsterCard(entry.getMonster());
-			MonsterCardholder cardHolder = new MonsterCardholder(encounter, monsterCardsList, monsterCard, entry);
+			MonsterCardholder cardHolder = new MonsterCardholder(encounter, monstersInEncounterScrollPane, newList, monsterCard, entry);
 			newList.add(cardHolder);
 			System.out.println(entry.getMName());
 		}
