@@ -2,10 +2,18 @@ package app;
 
 import java.sql.*;
 
+/**
+ * This class is designed for getting and managing monsters from the database
+ */
 public class MonsterFactory {
     
     /**
-     * This will give us a way to dump monsters into an object.
+     * Will find a monster enntity in the database and populate it
+     *  Returns null if monster is not present
+     * 
+     * @param name
+     * @param source
+     * @return
      */
     public static Monster createMonster(String name, String source) {
 
@@ -40,6 +48,14 @@ public class MonsterFactory {
         return monster;
     }
 
+    /**
+     * Adds the base stats from the database
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void setMonsterBase(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -87,6 +103,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monster senses from the database
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterSenses(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -117,6 +141,14 @@ public class MonsterFactory {
 
     }
 
+    /**
+     * Adds the monster condition immunities from the database
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterCondImmunities(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -146,6 +178,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monster languages from the database
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterLanguages(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -175,6 +215,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monster actions from the database
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterActions(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -204,6 +252,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monsters legendary actions from the database
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterLegendaryActions(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -237,6 +293,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monsters passives from the DB
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterPassives(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -269,6 +333,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monsters skills from the DB
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterSkills(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
@@ -303,6 +375,14 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Adds the monsters saves from the DB
+     * 
+     * @param conn
+     * @param monster
+     * @param name
+     * @param source
+     */
     private static void addMonsterSaves(Connection conn, Monster monster, String name, String source) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
