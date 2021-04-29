@@ -72,6 +72,9 @@ public class Encounter {
         return monstersToRemove;
     }
 
+    public List<MonsterEntry> getMonsterEntryList() {
+        return monsterEntries;
+    }
 
     public void addMonster(Monster monster) {
         monsters.add(monster);
