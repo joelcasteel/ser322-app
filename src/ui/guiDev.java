@@ -394,6 +394,7 @@ public class guiDev extends JFrame {
                   encounter.setNotes(notes);
                   encounter.setDifficulty(difficulty);
                   EncounterFactory.saveEncounter(encounter);
+                  JOptionPane.showMessageDialog(null, "Encounter Saved!");
               }
 
 
