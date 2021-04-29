@@ -15,6 +15,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,6 +28,7 @@ import java.awt.Dimension;
 
 
 public class guiDev extends JFrame {
+
     private HintTextField txtMonsterName;
     private HintTextField txtMonsterSource;
     private HintTextField txtMonsterAlias;
@@ -37,6 +39,10 @@ public class guiDev extends JFrame {
     private HintTextField textDescription;
     private HintTextField textEncounterNotes;
     private HintTextField textField;
+
+	private JScrollPane monstersInEncounterScrollPane;
+	JPanel monsterCardsList;
+
 
 	private Encounter encounter = null;
 	private MonsterEntry monsterEntry = null;
@@ -301,6 +307,7 @@ public class guiDev extends JFrame {
 		mainPanel.add(encounterPanel);
 		encounterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
+
       txtEncounterName = new HintTextField("Encounter Name");
       txtEncounterName.setColumns(10);
       encounterPanel.add(txtEncounterName);
@@ -338,13 +345,16 @@ public class guiDev extends JFrame {
                   textDescription.setText(encounter.getDescription());
                   textDifficulty.setText(encounter.getDifficulty());
                   textEncounterNotes.setText(encounter.getNotes());
+                  populateMonsterList(encounter.getMonsterEntryList());
               } else {
 
                   encounter = EncounterFactory.createEncounter(name, username, textDescription.getText(),
                           textEncounterNotes.getText());
+   
               }
           }
       });
+
 		encounterPanel.add(btnSearchEncounter);
 		
       JButton btnSaveEncounter = new JButton("Save Encounter");
@@ -373,42 +383,50 @@ public class guiDev extends JFrame {
       });
 		encounterPanel.add(btnSaveEncounter);
 		
-		JPanel monsterCardsList = new JPanel();
-		monsterCardsList.setAutoscrolls(true);
-		monsterCardsList.setSize(1000, 1000);
-		monsterCardsList.setLayout(new BoxLayout(monsterCardsList, BoxLayout.Y_AXIS));
+//<<<<<<< HEAD
+//		JPanel monsterCardsList = new JPanel();
+//		monsterCardsList.setAutoscrolls(true);
+//		monsterCardsList.setSize(1000, 1000);
+//		monsterCardsList.setLayout(new BoxLayout(monsterCardsList, BoxLayout.Y_AXIS));
+//
+//		
+//		
+//		JPanel monsterCard1 = new JPanel();
+//		JPanel monsterCard2 = new JPanel();
+//		JPanel monsterCard3 = new JPanel();
+//		JPanel monsterCard4 = new JPanel();
+//
+//		JLabel testtxt = new JLabel("test");
+//
+//		monsterCard1.setSize(604, 510);
+//		monsterCard2.setAutoscrolls(true);
+//		monsterCard3.setAutoscrolls(true);
+//		monsterCard4.setAutoscrolls(true);
+//
+//		monsterCard1.setBackground(Color.BLACK);
+//		monsterCard1.setSize(604, 2000);
+//		monsterCard2.setBackground(Color.BLUE);
+//
+//		monsterCard3.setBackground(Color.cyan);
+//		monsterCard4.setBackground(Color.red);
+//
+//
+//		monsterCardsList.add(monsterCard1);
+//		monsterCardsList.add(monsterCard2);
+//		monsterCardsList.add(monsterCard3);
+//		monsterCardsList.add(monsterCard4);
+//
+//
+//		monsterCardsList.setAutoscrolls(true);
+//=======
+		monsterCardsList = new JPanel();
+		monsterCardsList.add(new JLabel("Search to see Monsters"));
+		//monsterCardsList.setAutoscrolls(true);
+
+	
 
 		
-		
-		JPanel monsterCard1 = new JPanel();
-		JPanel monsterCard2 = new JPanel();
-		JPanel monsterCard3 = new JPanel();
-		JPanel monsterCard4 = new JPanel();
-
-		JLabel testtxt = new JLabel("test");
-
-		monsterCard1.setSize(604, 510);
-		monsterCard2.setAutoscrolls(true);
-		monsterCard3.setAutoscrolls(true);
-		monsterCard4.setAutoscrolls(true);
-
-		monsterCard1.setBackground(Color.BLACK);
-		monsterCard1.setSize(604, 2000);
-		monsterCard2.setBackground(Color.BLUE);
-
-		monsterCard3.setBackground(Color.cyan);
-		monsterCard4.setBackground(Color.red);
-
-
-		monsterCardsList.add(monsterCard1);
-		monsterCardsList.add(monsterCard2);
-		monsterCardsList.add(monsterCard3);
-		monsterCardsList.add(monsterCard4);
-
-
-		monsterCardsList.setAutoscrolls(true);
-		
-		JScrollPane monstersInEncounterScrollPane = new JScrollPane(monsterCardsList);
+		monstersInEncounterScrollPane = new JScrollPane(monsterCardsList);
 		monstersInEncounterScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		monstersInEncounterScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		monstersInEncounterScrollPane.setBounds(526, 60, 604, 510);
@@ -421,6 +439,35 @@ public class guiDev extends JFrame {
 		this.setVisible(true);
 		this.setSize(1162, 618);
 		this.setResizable(false);
+	}
+
+	public void populateMonsterList(List<MonsterEntry> list) {
+
+		JPanel newList = new JPanel();
+		BoxLayout layout = new BoxLayout(newList, BoxLayout.Y_AXIS);
+		newList.setLayout(layout);
+		//newList.add(new JLabel("Monsters"));
+
+		Encounter e = encounter;
+
+		e.getClass();
+		e.getEName();
+
+		for(MonsterEntry entry: list) {
+			MonsterCard monsterCard = new MonsterCard(entry.getMonster());
+			MonsterCardholder cardHolder = new MonsterCardholder(encounter, monstersInEncounterScrollPane, newList, monsterCard, entry);
+			newList.add(cardHolder);
+			System.out.println(entry.getMName());
+		}
+
+		JPanel p = new JPanel();
+		p.add(newList);
+		monstersInEncounterScrollPane.setViewportView(p);
+		monstersInEncounterScrollPane.revalidate();
+		monsterCardsList.revalidate();
+		revalidate();
+
+		
 	}
 }
 

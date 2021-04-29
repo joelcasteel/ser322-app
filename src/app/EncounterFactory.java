@@ -1,6 +1,7 @@
 package app;
 
 import java.sql.*;
+import java.util.List;
 
 public class EncounterFactory {
     public static Encounter getEncounter(String eName, String username) {
@@ -86,6 +87,9 @@ public class EncounterFactory {
                 encounter.addMonsterEntryFromDB(new MonsterEntry(
                     mName, mSource, monster, rs.getString("Alias"), rs.getString("Notes")
                 ));
+
+                Encounter e = encounter;
+                e.getAddList();
         }
 
         } catch(Exception exception) {
@@ -123,14 +127,26 @@ public class EncounterFactory {
         try {
             conn = ConnectionFactory.getConnection();
 
+            if(!checkUserExists(conn, encounter.getUsername())) {
+                insertUser(conn, encounter.getUsername());
+            }
+
             if(checkExists(conn, encounter.getEName(), encounter.getUsername())) {
                 success = updateEncounter(conn, encounter.getEName(), encounter.getDescription(), encounter.getNotes(), encounter.getDifficulty(), encounter.getUsername());
-                addMonsterEntries(conn, encounter);
-                removerMonsterEntries(conn, encounter);
+                if(encounter.getAddList().size() > 0) {
+                    addMonsterEntries(conn, encounter);
+                }
+
+                if(encounter.getRemoveList().size() > 0) {
+                    removerMonsterEntries(conn, encounter);
+                }
+                
 
             } else {
                 success = insertEncounter(conn, encounter.getEName(), encounter.getDescription(), encounter.getNotes(), encounter.getDifficulty(), encounter.getUsername());
-                addMonsterEntries(conn, encounter);
+                if(encounter.getAddList().size() > 0) {
+                    addMonsterEntries(conn, encounter);
+                }
 
             }
 
@@ -163,9 +179,41 @@ public class EncounterFactory {
         boolean exists = false;
 
         try {
-            stmt = conn.prepareStatement("SELECT MName, MSource, Alias, Notes FROM CONSISTS_OF WHERE EName = ? AND Username = ?");
+            stmt = conn.prepareStatement("SELECT EName, Username FROM ENCOUNTER WHERE EName = ? AND Username = ?");
             stmt.setString(1, eName);
             stmt.setString(2, username);
+            rs = stmt.executeQuery();
+
+                exists = rs.next();
+
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+        return exists;
+    }
+
+    private static boolean checkUserExists(Connection conn, String username) {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+
+        boolean exists = false;
+
+        try {
+            stmt = conn.prepareStatement("SELECT Username FROM USER WHERE Username = ?");
+            stmt.setString(1, username);
             rs = stmt.executeQuery();
 
             exists = rs.next();
@@ -186,6 +234,35 @@ public class EncounterFactory {
             
         }
         return exists;
+    }
+
+    private static boolean insertUser(Connection conn, String username) {
+        PreparedStatement stmt = null;
+
+        boolean saved = false;
+
+        try {
+            stmt = conn.prepareStatement("INSERT into USER(Username) VALUES (?);");
+            stmt.setString(1, username);
+            int count = stmt.executeUpdate();
+
+            saved = (count > 0);
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+
+        } finally {
+            try {
+                stmt.close();
+                
+
+            } catch(SQLException sqlException) {
+                sqlException.printStackTrace();
+
+            }
+            
+        }
+        return saved;
     }
 
     private static boolean insertEncounter(Connection conn, String name, String description, String notes, String difficulty, String username ) {
