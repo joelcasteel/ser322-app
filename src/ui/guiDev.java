@@ -12,17 +12,13 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.sql.Connection;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.Component;
 import java.awt.Dimension;
 
 
@@ -36,7 +32,6 @@ public class guiDev extends JFrame {
     private HintTextField textDifficulty;
     private HintTextField textDescription;
     private HintTextField textEncounterNotes;
-    private HintTextField textField;
 
 	private Encounter encounter = null;
 	private MonsterEntry monsterEntry = null;
@@ -102,29 +97,26 @@ public class guiDev extends JFrame {
 
 					//Remove all previous elements from the panel
 					monsterCardPanel.removeAll();
-
+					
 					//display the statblock label
 					String statsBlock = "STR: " + monster.getStr() + "\nDEX: " + monster.getDex() + "\nCON: " + monster.getCon() + "\nINT: " + monster.getIntl() +
 							"\nWIS: " + monster.getWis() + "\nCHA: " + monster.getCha() + "\n";
-					JTextArea statBlock = new JTextArea(statsBlock);
+					JTextArea statBlock = new CustomTextArea(statsBlock);
 					statBlock.setEditable(false);
-					statBlock.setBackground(monsterCardPanel.getBackground());
 					monsterCardPanel.add(statBlock);
 					
 					//display the hp, armor class, challenge rating, and legendary count label
 					String hpAcCr = "HP: " + monster.getHp() + "\nArmor Class: " + monster.getAc() + "\nChallenge Rating: " + monster.getCr() + 
 							"\nLegendary Action Count: " + monster.getLegendCount() + "\n";
-					JTextArea hpBlock = new JTextArea(hpAcCr);
+					JTextArea hpBlock = new CustomTextArea(hpAcCr);
 					hpBlock.setEditable(false);
-					hpBlock.setBackground(monsterCardPanel.getBackground());
 					monsterCardPanel.add(hpBlock);
 					
 					//display monster descriptors
 					String descriptors = "Type: " + monster.getType() + "\nSize: " + monster.getSize() + "\nSpeed: " + monster.getSpeed() + "\nAlignment: "
 					+ monster.getAlignment() + "\n";
-					JTextArea descriptorBlock = new JTextArea(descriptors);
+					JTextArea descriptorBlock = new CustomTextArea(descriptors);
 					descriptorBlock.setEditable(false);
-					descriptorBlock.setBackground(monsterCardPanel.getBackground());
 					monsterCardPanel.add(descriptorBlock);
 					
 					//display monster senses
@@ -134,9 +126,8 @@ public class guiDev extends JFrame {
 						for (String s : senses) {
 							senseStr += s + "\n";
 						}
-						JTextArea sensesBlock = new JTextArea(senseStr);
+						JTextArea sensesBlock = new CustomTextArea(senseStr);
 						sensesBlock.setEditable(false);
-						sensesBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(sensesBlock);
 					}
 					
@@ -147,9 +138,8 @@ public class guiDev extends JFrame {
 						for (String s : condImm) {
 							condImmStr += s + "\n";
 						}
-						JTextArea condImmBlock = new JTextArea(condImmStr);
+						JTextArea condImmBlock = new CustomTextArea(condImmStr);
 						condImmBlock.setEditable(false);
-						condImmBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(condImmBlock);
 					}
 					
@@ -159,9 +149,8 @@ public class guiDev extends JFrame {
 						for (String s : languages) {
 							langStr += s + "\n";
 						}
-						JTextArea langBlock = new JTextArea(langStr);
+						JTextArea langBlock = new CustomTextArea(langStr);
 						langBlock.setEditable(false);
-						langBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(langBlock);
 					}
 					
@@ -171,9 +160,8 @@ public class guiDev extends JFrame {
 						for (String s : dmgImmList) {
 							dmgImm += s + "\n";
 						}
-						JTextArea dmgImmBlock = new JTextArea(dmgImm);
+						JTextArea dmgImmBlock = new CustomTextArea(dmgImm);
 						dmgImmBlock.setEditable(false);
-						dmgImmBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(dmgImmBlock);
 					}
 					
@@ -183,9 +171,8 @@ public class guiDev extends JFrame {
 						for (String s : dmgVulList) {
 							dmgVuln += s + "\n";
 						}
-						JTextArea dmgVulnBlock = new JTextArea(dmgVuln);
+						JTextArea dmgVulnBlock = new CustomTextArea(dmgVuln);
 						dmgVulnBlock.setEditable(false);
-						dmgVulnBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(dmgVulnBlock);
 					}
 					
@@ -196,9 +183,8 @@ public class guiDev extends JFrame {
 							actionStr += "Action Name: " + a.getName() + "\nDescription: " + 
 						a.getDescription() + "\n\n";
 						}
-						JTextArea actionBlock = new JTextArea(actionStr);
+						JTextArea actionBlock = new CustomTextArea(actionStr);
 						actionBlock.setEditable(false);
-						actionBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(actionBlock);
 					}
 					
@@ -209,9 +195,8 @@ public class guiDev extends JFrame {
 							legActionStr += "Action Name: " + a.getName() + "\nDescription: " + 
 						a.getDescription() + "\n\n";
 						}
-						JTextArea legActionBlock = new JTextArea(legActionStr);
+						JTextArea legActionBlock = new CustomTextArea(legActionStr);
 						legActionBlock.setEditable(false);
-						legActionBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(legActionBlock);
 					}
 					
@@ -222,9 +207,8 @@ public class guiDev extends JFrame {
 							passives += "Passive Name: " + p.getName() + "\nDescription: " + 
 						p.getDescription() + "\n\n";
 						}
-						JTextArea passivesBlock = new JTextArea(passives);
+						JTextArea passivesBlock = new CustomTextArea(passives);
 						passivesBlock.setEditable(false);
-						passivesBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(passivesBlock);
 					}
 					
@@ -236,9 +220,8 @@ public class guiDev extends JFrame {
 							skillsStr += "Skill Name: " + s.getName() + "\nScore: " + 
 						s.getScore() + "\n\n";
 						}
-						JTextArea skillsBlock = new JTextArea(skillsStr);
+						JTextArea skillsBlock = new CustomTextArea(skillsStr);
 						skillsBlock.setEditable(false);
-						skillsBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(skillsBlock);
 					}
 					
@@ -250,26 +233,24 @@ public class guiDev extends JFrame {
 							savesStr += "Save Name: " + s.getName() + "\nScore: " + 
 						s.getScore() + "\n\n";
 						}
-						JTextArea savesBlock = new JTextArea(savesStr);
+						JTextArea savesBlock = new CustomTextArea(savesStr);
 						savesBlock.setEditable(false);
-						savesBlock.setBackground(monsterCardPanel.getBackground());
 						monsterCardPanel.add(savesBlock);
 					}
 					
-					
 					monsterCardPanel.updateUI();
+					monsterCardPanel.repaint();
+
               }
           }
       });
       
 		MonsterSearchBarPanel.add(btnMonsterSearch);
 		
-	
-
-		JScrollPane test = new JScrollPane(monsterCardPanel);
-		test.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		test.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);		
-		monsterSearchPanel.add(test, BorderLayout.CENTER);
+		JScrollPane monsterCardScroller = new JScrollPane(monsterCardPanel);
+		monsterCardScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		monsterCardScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);		
+		monsterSearchPanel.add(monsterCardScroller, BorderLayout.CENTER);
 		
 		JPanel addMonsterPanel = new JPanel();
 		monsterSearchPanel.add(addMonsterPanel, BorderLayout.SOUTH);
@@ -385,14 +366,6 @@ public class guiDev extends JFrame {
 		JLabel testtxt = new JLabel("test");
 
 
-
-		monsterCard1.setBackground(Color.BLACK);
-		monsterCard1.setSize(604, 2000);
-		monsterCard2.setBackground(Color.BLUE);
-
-		monsterCard3.setBackground(Color.cyan);
-
-
 		monsterCardsList.add(monsterCard1);
 		monsterCardsList.add(monsterCard2);
 		monsterCardsList.add(monsterCard3);
@@ -415,6 +388,45 @@ public class guiDev extends JFrame {
 		this.setResizable(false);
 	}
 }
+
+
+//Modified based on the code provided at the link below.
+//https://stackoverflow.com/questions/15992831/inserting-an-image-under-a-jtextarea/15993627#15993627
+class CustomTextArea extends JTextArea {
+    private BufferedImage img;
+    private JPanel bgSlave;
+    
+    public CustomTextArea(String s) {
+    	super(s);
+    	bgSlave = new JPanel();
+        try{
+            img = ImageIO.read(new File("src\\resources\\monsterCardBG.jpg"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public boolean isOpaque() {
+    	return false;
+    }
+    
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(bgSlave.getBackground());
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        if (img != null) {
+            int x = -250;
+            int y = -100;
+            g2d.drawImage(img, x, y, this);    
+        }
+        super.paintComponent(g2d);
+        g2d.dispose();
+    }
+}
+
 
 
 //source: https://stackoverflow.com/questions/1738966/java-jtextfield-with-input-hint
