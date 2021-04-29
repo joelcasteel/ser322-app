@@ -250,6 +250,8 @@ public class guiDev extends JFrame {
 		encounterPanel.add(btnSaveEncounter);
 		
 		JPanel monsterCardsList = new JPanel();
+		monsterCardsList.setAutoscrolls(true);
+		monsterCardsList.setSize(1000, 1000);
 		monsterCardsList.setLayout(new BoxLayout(monsterCardsList, BoxLayout.Y_AXIS));
 
 		
@@ -257,21 +259,27 @@ public class guiDev extends JFrame {
 		JPanel monsterCard1 = new JPanel();
 		JPanel monsterCard2 = new JPanel();
 		JPanel monsterCard3 = new JPanel();
+		JPanel monsterCard4 = new JPanel();
 
 		JLabel testtxt = new JLabel("test");
 
-
+		monsterCard1.setSize(604, 510);
+		monsterCard2.setAutoscrolls(true);
+		monsterCard3.setAutoscrolls(true);
+		monsterCard4.setAutoscrolls(true);
 
 		monsterCard1.setBackground(Color.BLACK);
 		monsterCard1.setSize(604, 2000);
 		monsterCard2.setBackground(Color.BLUE);
 
 		monsterCard3.setBackground(Color.cyan);
+		monsterCard4.setBackground(Color.red);
 
 
 		monsterCardsList.add(monsterCard1);
 		monsterCardsList.add(monsterCard2);
 		monsterCardsList.add(monsterCard3);
+		monsterCardsList.add(monsterCard4);
 
 
 		monsterCardsList.setAutoscrolls(true);
