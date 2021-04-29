@@ -13,6 +13,7 @@ import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -295,8 +296,14 @@ public class guiDev extends JFrame {
                   JOptionPane.showMessageDialog(null, "No Encounters");
               } else if (monsterEntry == null) {
                   JOptionPane.showMessageDialog(null, "No Monster Selected");
+              } else if (txtMonsterAlias.getText() == "") {
+                  JOptionPane.showMessageDialog(null, "No Alias Selected");
               } else {
+                  
+                  monsterEntry.setAlias(txtMonsterAlias.getText());
+                  monsterEntry.setNotes(txtMonsterNotes.getText());
                   encounter.addMonsterEnty(monsterEntry);
+                  populateMonsterList(encounter.getMonsterEntryList());
               }
           }
       });
@@ -340,16 +347,24 @@ public class guiDev extends JFrame {
               }
 
               Encounter result = EncounterFactory.getEncounter(name, username);
+
+              
               if (result != null) {
                   encounter = result;
                   textDescription.setText(encounter.getDescription());
+                  textDescription.setHintText(encounter.getDescription());
+                  
                   textDifficulty.setText(encounter.getDifficulty());
+                  textDifficulty.setHintText(encounter.getDifficulty());
+                  
                   textEncounterNotes.setText(encounter.getNotes());
+                  textEncounterNotes.setHintText(encounter.getNotes());
                   populateMonsterList(encounter.getMonsterEntryList());
               } else {
 
                   encounter = EncounterFactory.createEncounter(name, username, textDescription.getText(),
                           textEncounterNotes.getText());
+                  JOptionPane.showMessageDialog(null, "Created New Encounter");
    
               }
           }
@@ -361,16 +376,19 @@ public class guiDev extends JFrame {
       btnSaveEncounter.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
 
-              String name = txtEncounterName.getText();
-              String username = textUserName.getText();
-              String description = textDescription.getText();
-              String notes = textEncounterNotes.getText();
-              String difficulty = textDifficulty.getText();
+              String name = txtEncounterName.getForceText();
+              String username = textUserName.getForceText();
+              String description = textDescription.getForceText();
+              String notes = textEncounterNotes.getForceText();
+              String difficulty = textDifficulty.getForceText();
               
 
               if (encounter == null) {
                   JOptionPane.showMessageDialog(null, "Please Search/Create an encounter first");
-              }else {
+              }else if(AliasCheck(encounter.getMonsterEntryList())) {
+                  JOptionPane.showMessageDialog(null, "Monsters must have unique aliases!");
+              }
+                  else {
                   encounter.setTitle(name, username);
                   encounter.setDescription(description);
                   encounter.setNotes(notes);
@@ -383,42 +401,6 @@ public class guiDev extends JFrame {
       });
 		encounterPanel.add(btnSaveEncounter);
 		
-//<<<<<<< HEAD
-//		JPanel monsterCardsList = new JPanel();
-//		monsterCardsList.setAutoscrolls(true);
-//		monsterCardsList.setSize(1000, 1000);
-//		monsterCardsList.setLayout(new BoxLayout(monsterCardsList, BoxLayout.Y_AXIS));
-//
-//		
-//		
-//		JPanel monsterCard1 = new JPanel();
-//		JPanel monsterCard2 = new JPanel();
-//		JPanel monsterCard3 = new JPanel();
-//		JPanel monsterCard4 = new JPanel();
-//
-//		JLabel testtxt = new JLabel("test");
-//
-//		monsterCard1.setSize(604, 510);
-//		monsterCard2.setAutoscrolls(true);
-//		monsterCard3.setAutoscrolls(true);
-//		monsterCard4.setAutoscrolls(true);
-//
-//		monsterCard1.setBackground(Color.BLACK);
-//		monsterCard1.setSize(604, 2000);
-//		monsterCard2.setBackground(Color.BLUE);
-//
-//		monsterCard3.setBackground(Color.cyan);
-//		monsterCard4.setBackground(Color.red);
-//
-//
-//		monsterCardsList.add(monsterCard1);
-//		monsterCardsList.add(monsterCard2);
-//		monsterCardsList.add(monsterCard3);
-//		monsterCardsList.add(monsterCard4);
-//
-//
-//		monsterCardsList.setAutoscrolls(true);
-//=======
 		monsterCardsList = new JPanel();
 		monsterCardsList.add(new JLabel("Search to see Monsters"));
 		//monsterCardsList.setAutoscrolls(true);
@@ -469,13 +451,27 @@ public class guiDev extends JFrame {
 
 		
 	}
+	
+	public boolean AliasCheck(List<MonsterEntry> list) {
+	    ArrayList<String> checklist = new ArrayList<String>();
+	    for(MonsterEntry entry: list) {
+	         String alias = entry.getAlias();
+	         for(String aliasCheck: checklist) {
+	             if(aliasCheck.equals(alias)) {
+	                 return true;
+	             }
+	         }
+	         checklist.add(alias);
+	      }
+	    return false;
+	}
 }
 
 
 //source: https://stackoverflow.com/questions/1738966/java-jtextfield-with-input-hint
 class HintTextField extends JTextField implements FocusListener {
 
- private final String hint;
+ private String hint;
  private boolean showingHint;
 
  public HintTextField(final String hint) {
@@ -504,6 +500,13 @@ class HintTextField extends JTextField implements FocusListener {
  @Override
  public String getText() {
      return showingHint ? "" : super.getText();
+ }
+ 
+ public String getForceText() {
+     return super.getText();
+ }
+ public void setHintText(String str) {
+     hint = str;
  }
  }
 
