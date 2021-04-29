@@ -54,6 +54,9 @@ public class Monster {
         
         senses = new ArrayList<>();
         condImmunities = new ArrayList<>();
+        damageImmunities = new ArrayList<>();
+        damageVulnerabilities = new ArrayList<>();
+        
         languages = new ArrayList<>();
 
         actions = new ArrayList<>();
@@ -220,16 +223,16 @@ public class Monster {
         this.senses.add(sense);
     }
 
-    public String getCondImmunity(int i) {
-        return this.condImmunities.get(i);
+    public List<String> getCondImmunity() {
+        return this.condImmunities;
     }
 
     public void addCondImmunity(String cond) {
         this.condImmunities.add(cond);
     }
 
-    public String getLanguage(int i) {
-        return this.languages.get(i);
+    public List<String> getLanguage() {
+        return this.languages;
     }
 
     public void addLanguage(String lang) {
@@ -240,56 +243,56 @@ public class Monster {
         actions.add(action);
     }
 
-    public Action getAction(int i) {
-        return actions.get(i);
+    public List<Action> getAction() {
+        return actions;
     }
 
     public void addLegendaryAction(LegendaryAction legendaryAction) {
         legendaryActions.add(legendaryAction);
     }
 
-    public LegendaryAction gLegendaryAction(int i) {
-        return legendaryActions.get(i);
+    public List<LegendaryAction> gLegendaryAction() {
+        return legendaryActions;
     }
 
     public void addPassive(Passive passive) {
         passives.add(passive);
     }
 
-    public Passive getPassive(int i) {
-        return passives.get(i);
+    public List<Passive> getPassive() {
+        return passives;
     }
 
     public void addDamageVulnerability(String damage) {
         damageVulnerabilities.add(damage);
     }
 
-    public String getDamageVulnerability(int i) {
-        return damageVulnerabilities.get(i);
+    public List<String> getDamageVulnerability() {
+        return damageVulnerabilities;
     }
 
     public void addDamageImmunity(String damage) {
         damageImmunities.add(damage);
     }
 
-    public String getDamageImmunity(int i) {
-        return damageImmunities.get(i);
+    public List<String> getDamageImmunity() {
+        return damageImmunities;
     }
 
     public void addSkill(Skill skill) {
         skills.add(skill);
     }
 
-    public Skill getSkill(int i) {
-        return skills.get(i);
+    public List<Skill> getSkill() {
+        return skills;
     }
 
     public void addSave(Skill save) {
         saves.add(save);
     }
 
-    public Skill getSave(int i) {
-        return saves.get(i);
+    public List<Skill> getSave() {
+        return saves;
     }
     
 

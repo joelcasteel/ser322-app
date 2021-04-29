@@ -5,6 +5,7 @@ import javax.swing.*;
 
 
 import app.*;
+import app.Action;
 
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -69,6 +71,7 @@ public class guiDev extends JFrame {
 		
 		
 	  JPanel monsterCardPanel = new JPanel();
+	  monsterCardPanel.setLayout(new BoxLayout(monsterCardPanel, BoxLayout.Y_AXIS));
 	  
       txtMonsterName = new HintTextField("Monster Name");
       txtMonsterName.setColumns(10);
@@ -100,37 +103,158 @@ public class guiDev extends JFrame {
 					//Remove all previous elements from the panel
 					monsterCardPanel.removeAll();
 
-					//Add the statblock label
+					//display the statblock label
 					String statsBlock = "STR: " + monster.getStr() + "\nDEX: " + monster.getDex() + "\nCON: " + monster.getCon() + "\nINT: " + monster.getIntl() +
-							"\nWIS: " + monster.getWis() + "\nCHA: " + monster.getCha();
+							"\nWIS: " + monster.getWis() + "\nCHA: " + monster.getCha() + "\n";
 					JTextArea statBlock = new JTextArea(statsBlock);
 					statBlock.setEditable(false);
+					statBlock.setBackground(monsterCardPanel.getBackground());
 					monsterCardPanel.add(statBlock);
 					
-					//Add the hp, armor class, challenge rating, and legendary count label
+					//display the hp, armor class, challenge rating, and legendary count label
 					String hpAcCr = "HP: " + monster.getHp() + "\nArmor Class: " + monster.getAc() + "\nChallenge Rating: " + monster.getCr() + 
-							"\nLegendary Action Count: " + monster.getLegendCount();
+							"\nLegendary Action Count: " + monster.getLegendCount() + "\n";
 					JTextArea hpBlock = new JTextArea(hpAcCr);
 					hpBlock.setEditable(false);
+					hpBlock.setBackground(monsterCardPanel.getBackground());
 					monsterCardPanel.add(hpBlock);
 					
-					String descriptors = "Type: " + monster.getType() + "\nSize: " + monster.getSize() + "\nSpeed: " + monster.getSpeed() + "\nAlignment: " + monster.getAlignment();
+					//display monster descriptors
+					String descriptors = "Type: " + monster.getType() + "\nSize: " + monster.getSize() + "\nSpeed: " + monster.getSpeed() + "\nAlignment: "
+					+ monster.getAlignment() + "\n";
 					JTextArea descriptorBlock = new JTextArea(descriptors);
 					descriptorBlock.setEditable(false);
+					descriptorBlock.setBackground(monsterCardPanel.getBackground());
 					monsterCardPanel.add(descriptorBlock);
 					
+					//display monster senses
 					List<String> senses = monster.getSenseList();
-					String senseStr = "Senses: ";
-					for (String s : senses) {
-						senseStr += s + "\n";
+					String senseStr = "Senses\n";
+					if (senses.size() > 0) {
+						for (String s : senses) {
+							senseStr += s + "\n";
+						}
+						JTextArea sensesBlock = new JTextArea(senseStr);
+						sensesBlock.setEditable(false);
+						sensesBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(sensesBlock);
 					}
-					JTextArea sensesBlock = new JTextArea(senseStr);
-					sensesBlock.setEditable(false);
-					monsterCardPanel.add(sensesBlock);
+					
+					// display monster conditional immunities
+					String condImmStr = "Conditional Immunities\n";
+					List<String> condImm = monster.getCondImmunity();
+					if (condImm.size() > 0) {
+						for (String s : condImm) {
+							condImmStr += s + "\n";
+						}
+						JTextArea condImmBlock = new JTextArea(condImmStr);
+						condImmBlock.setEditable(false);
+						condImmBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(condImmBlock);
+					}
+					
+					String langStr = "Languages\n";
+					List<String> languages = monster.getLanguage();
+					if (languages.size() > 0) {
+						for (String s : languages) {
+							langStr += s + "\n";
+						}
+						JTextArea langBlock = new JTextArea(langStr);
+						langBlock.setEditable(false);
+						langBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(langBlock);
+					}
+					
+					String dmgImm = "Damage Immunities\n";
+					List<String> dmgImmList = monster.getDamageImmunity();
+					if (dmgImmList.size() > 0) {
+						for (String s : dmgImmList) {
+							dmgImm += s + "\n";
+						}
+						JTextArea dmgImmBlock = new JTextArea(dmgImm);
+						dmgImmBlock.setEditable(false);
+						dmgImmBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(dmgImmBlock);
+					}
+					
+					String dmgVuln = "Damage Vulnerabilities\n";
+					List<String> dmgVulList = monster.getDamageVulnerability();
+					if (dmgVulList.size() > 0) {
+						for (String s : dmgVulList) {
+							dmgVuln += s + "\n";
+						}
+						JTextArea dmgVulnBlock = new JTextArea(dmgVuln);
+						dmgVulnBlock.setEditable(false);
+						dmgVulnBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(dmgVulnBlock);
+					}
+					
+					String actionStr = "Actions\n";
+					List<Action> actions = monster.getAction();
+					if (actions.size() > 0) {
+						for (Action a : actions) {
+							actionStr += "Action Name: " + a.getName() + "\nDescription: " + 
+						a.getDescription() + "\n\n";
+						}
+						JTextArea actionBlock = new JTextArea(actionStr);
+						actionBlock.setEditable(false);
+						actionBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(actionBlock);
+					}
+					
+					String legActionStr = "Legendary Actions\n";
+					List<LegendaryAction> legActions = monster.gLegendaryAction();
+					if (legActions.size() > 0) {
+						for (LegendaryAction a : legActions) {
+							legActionStr += "Action Name: " + a.getName() + "\nDescription: " + 
+						a.getDescription() + "\n\n";
+						}
+						JTextArea legActionBlock = new JTextArea(legActionStr);
+						legActionBlock.setEditable(false);
+						legActionBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(legActionBlock);
+					}
+					
+					String passives = "Passives\n";
+					List<Passive> passivesList = monster.getPassive();
+					if (passivesList.size() > 0) {
+						for (Passive p : passivesList) {
+							passives += "Passive Name: " + p.getName() + "\nDescription: " + 
+						p.getDescription() + "\n\n";
+						}
+						JTextArea passivesBlock = new JTextArea(passives);
+						passivesBlock.setEditable(false);
+						passivesBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(passivesBlock);
+					}
 					
 					
-					//List<String> condImm = monster.getCondImmunity(0);
+					String skillsStr = "Skills\n";
+					List<Skill> skillList = monster.getSkill();
+					if (skillList.size() > 0) {
+						for (Skill s : skillList) {
+							skillsStr += "Skill Name: " + s.getName() + "\nScore: " + 
+						s.getScore() + "\n\n";
+						}
+						JTextArea skillsBlock = new JTextArea(skillsStr);
+						skillsBlock.setEditable(false);
+						skillsBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(skillsBlock);
+					}
 					
+					
+					String savesStr = "Saves\n";
+					List<Skill> savesList = monster.getSave();
+					if (savesList.size() > 0) {
+						for (Skill s : savesList) {
+							savesStr += "Save Name: " + s.getName() + "\nScore: " + 
+						s.getScore() + "\n\n";
+						}
+						JTextArea savesBlock = new JTextArea(savesStr);
+						savesBlock.setEditable(false);
+						savesBlock.setBackground(monsterCardPanel.getBackground());
+						monsterCardPanel.add(savesBlock);
+					}
 					
 					
 					monsterCardPanel.updateUI();
@@ -142,10 +266,10 @@ public class guiDev extends JFrame {
 		
 	
 
-		
-		
-		
-		monsterSearchPanel.add(monsterCardPanel, BorderLayout.CENTER);
+		JScrollPane test = new JScrollPane(monsterCardPanel);
+		test.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		test.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);		
+		monsterSearchPanel.add(test, BorderLayout.CENTER);
 		
 		JPanel addMonsterPanel = new JPanel();
 		monsterSearchPanel.add(addMonsterPanel, BorderLayout.SOUTH);
@@ -298,7 +422,6 @@ public class guiDev extends JFrame {
 		this.setSize(1162, 618);
 		this.setResizable(false);
 	}
-
 }
 
 
